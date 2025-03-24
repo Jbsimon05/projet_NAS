@@ -15,6 +15,7 @@ Le projet NAS (Network Automation System) est une solution d'automatisation rés
 ## Installation
 
 1. Clonez ce dépôt :
+
    ```bash
    git clone https://github.com/votre-utilisateur/projet_NAS.git
    cd projet_NAS
@@ -23,6 +24,7 @@ Le projet NAS (Network Automation System) est une solution d'automatisation rés
 2. Assurez-vous d'avoir Python 3.x installé.
 
 3. Installez les dépendances nécessaires :
+
    ```bash
    pip install -r requirements.txt
    ```
@@ -33,14 +35,18 @@ Le projet NAS (Network Automation System) est une solution d'automatisation rés
 
 1. Modifiez le fichier `intends.json` pour définir votre topologie réseau.
 2. Exécutez le script principal pour générer les configurations :
+
    ```bash
    python GNS_code/main.py
    ```
+
 3. Déplacez les fichiers générés vers les dossiers de configuration GNS3 :
+
    ```bash
    jupyter nbconvert --to script GNS_code/move_files.ipynb
    python GNS_code/move_files.py
    ```
+
 4. Chargez les configurations dans GNS3 et démarrez vos routeurs.
 
 ## Project Structure
@@ -56,9 +62,11 @@ Les contributions sont les bienvenues ! Veuillez suivre les étapes suivantes :
 
 1. Forkez ce dépôt.
 2. Créez une branche pour vos modifications :
+
    ```bash
    git checkout -b feature/ma-fonctionnalite
    ```
+
 3. Soumettez une pull request avec une description claire de vos changements.
 
 ## License
