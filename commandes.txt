@@ -1,0 +1,37 @@
+Légende :
+() = Pas obligatoire
+# = Commentaires
+
+
+
+enable
+conf t
+	ip routing
+	mpls ip
+	(mpls ldp router-id Loopback0 force)
+	router ospf 1
+		router-id X.X.X.X
+		exit
+	interface GigabitEthernet…/0
+		ip address …/30 
+		no shutdown
+		ip ospf 1 area 0
+		mpls ip
+		exit
+	interface Loopback0
+		ip addres 192.168.X.X/32 
+		ip ospf 1 area 0
+		mpls ip
+		exit
+# Uniquement sur les PE
+	router bgp … 
+		(bgp router-id X.X.X.X)
+		bgp (default) ipv4 unicast
+		bgp log-neighbor-changes
+		neighbor …  remote-as …   # Utiliser les addresses de loopbak0
+		address-family ipv4
+			network … (subnet, finit en .0)
+			neighbor … activate # Utiliser les addresses de loopbak0
+		
+	exit
+write
