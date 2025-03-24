@@ -57,23 +57,6 @@ def give_subnet_dict(topology: dict) -> dict:
                     subnet_number += 1
     return subnet_dict
 
-def is_border_router(routeur: str, topology: dict, AS: str) -> bool:
-    """
-    Return whether a given router is a border router of its AS.
-    Args:
-        routeur (str): The router identifier.
-        topology (dict): The network topology.
-        AS (str): The AS identifier.
-    Returns:
-        bool: True if the router is a border router, False otherwise.
-    """
-    state = False
-    for AS in topology :
-        for AS_neighbor in topology[AS]['neighbor'] : 
-            if routeur in topology[AS]['neighbor'][AS_neighbor].keys() :
-                state = True 
-    return state
-
 def last_entries_subnet(subnet_dict: dict) -> int:
     """
     Find and return the last subnet value used.
