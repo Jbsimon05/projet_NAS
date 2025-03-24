@@ -1,5 +1,7 @@
 # Design Document - Projet NAS
 
+![GNS3 Main Screen](images/GNS3_main_screen.png)
+
 ## Overview
 
 Le projet NAS est conçu pour automatiser la configuration des réseaux complexes en utilisant des fichiers JSON pour définir la topologie et des scripts Python pour générer les configurations. Ce document décrit l'architecture, les composants, et le flux de travail du projet.

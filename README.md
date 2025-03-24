@@ -1,5 +1,7 @@
 # Projet NAS - Network Automation System
 
+![GNS3 Main Screen](images/GNS3_main_screen.png)
+
 ## Description
 
 Le projet NAS (Network Automation System) est une solution d'automatisation réseau conçue pour configurer et gérer des topologies complexes de routeurs. Il permet de générer des configurations pour des protocoles tels que RIP, OSPF, et BGP, tout en prenant en charge les interconnexions entre différents systèmes autonomes (AS). Ce projet est particulièrement utile pour les environnements de simulation réseau comme GNS3.
