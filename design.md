@@ -16,7 +16,7 @@ Le projet NAS est conçu pour automatiser la configuration des réseaux complexe
    - `main.py` : Point d'entrée principal pour générer les configurations.
    - `protocols.py` : Gère l'activation des protocoles RIP, OSPF, et BGP.
    - `tools.py` : Fournit des fonctions utilitaires pour manipuler les fichiers de configuration.
-   - `move_files.ipynb` : Script pour organiser et déplacer les fichiers générés.
+   - `move_files.py` : Script pour organiser et déplacer les fichiers générés.
 
 3. **GNS3 Integration** :
    - Les fichiers générés sont compatibles avec les projets GNS3 pour une simulation réseau.
