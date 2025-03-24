@@ -126,7 +126,7 @@ def generate_addresses_dict(topology: dict) -> dict:
         dict: A dictionary with neighbors, interfaces, IP addresses, and AS for each router.
     Output format:
         {
-            "R1": [{"R2": ["interface", "ipv6 address", "AS"]}, {"R3": ["interface", "ipv6 address", "AS"]}, ...],
+            "R1": [{"R2": ["GigabitEthernet1/0", "2001::1", "AS_1"]}, {"R3": ["interface", "ipv6 address", "AS"]}, ...],
             "R2": [{"R1": ["interface", "ipv6 address", "AS"]}, {"R4": ["interface", "ipv6 address", "AS"]}, ...],
             ...
         }
