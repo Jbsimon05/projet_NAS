@@ -1,0 +1,35 @@
+{
+    "AS_0": {
+        "address" : "192.168.0.0",
+        "subnet_mask" : "/8",
+        "routers" : {
+            "PE1" : {"P1" : "FastEthernet0/0"},
+            "P1" : {"PE1" : "FastEthernet0/0", "P2" : "GigabitEthernet1/0", "P3" : "GigabitEthernet2/0"},
+            "P2" : {"P1" : "GigabitEthernet1/0", "P4" : "GigabitEthernet2/0"},
+            "P3" : {"P1" : "GigabitEthernet2/0", "P4" : "GigabitEthernet1/0"},
+            "P4" : {"PE2" : "FastEthernet0/0"}
+        },
+        "protocol" : "OSPF",
+        "clients" : {
+            "Red": {
+                  "Red1": {
+                        "PE1": "GigabitEthernet1/0"
+                  }, "Red2": {
+                        "PE2": "GigabitEthernet1/0"
+                  }
+            }, "Green": {
+                  "Green1": {
+                        "PE1": "GigabitEthernet2/0"
+                  }, "Green2": {
+                        "PE2": "GigabitEthernet2/0"
+                  }
+            }, "Blue": {
+                  "Blue1": {
+                        "PE1": "GigabitEthernet3/0"
+                  }, "Blue2": {
+                        "PE2": "GigabitEthernet3/0"
+                  }
+            }
+        }
+    }
+}
