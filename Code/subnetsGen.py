@@ -1,5 +1,4 @@
-
-
+import json
 
 class SubnetsGen:
 
@@ -7,6 +6,12 @@ class SubnetsGen:
             self.intent = intent
             self.subnet_dict = {}
             self.subnet_interconnexion_dict = {}
+            self.router_neighbors = {}
+            
+            self.generate_addresses_dict()
+            self.save_to_json()
+            
+            
 
       def give_subnet_dict(self) -> dict:
             """
@@ -104,39 +109,38 @@ class SubnetsGen:
                   ...
               }
           """
-          router_neighbors = {}
           # Creates the subnet_dict
-          subnet_dict = self.give_subnet_dict()
-          subnet_interconnexion_dict = self.give_subnet_interconnexion()
+          self.give_subnet_dict()
+          self.give_subnet_interconnexion()
           # Iterate over each AS
           for AS in self.intent:
               # Iterate over each router in the current AS
               for router in self.intent[AS]['routers']:
-                  if router not in router_neighbors:
-                      router_neighbors[router] = []
+                  if router not in self.router_neighbors:
+                      self.router_neighbors[router] = []
                   # Iterate over each neighbor of the current router
                   for neighbor, interface in self.intent[AS]['routers'][router].items():
                       # To ensure it's in the correct order
                       if router[1:] < neighbor[1:]:
-                          subnet_index = subnet_dict[AS][(router, neighbor)]
+                          subnet_index = self.subnet_dict[AS][(router, neighbor)]
                           router_index = 1
                       else:
-                          subnet_index = subnet_dict[AS][(neighbor, router)]
+                          subnet_index = self.subnet_dict[AS][(neighbor, router)]
                           router_index = 2
                       ipv6_address = f"{self.intent[AS]['address']}{subnet_index}::{router_index}{self.intent[AS]['subnet_mask']}"
-                      router_neighbors[router].append({neighbor: [interface, ipv6_address, AS]})
+                      self.router_neighbors[router].append({neighbor: [interface, ipv6_address, AS]})
           # Handle inter-AS connections
           for AS in self.intent:
               for AS_neighbor in self.intent[AS]['neighbor']:
                   for router1 in self.intent[AS]['neighbor'][AS_neighbor]:
                       for router2, interface in self.intent[AS]['neighbor'][AS_neighbor][router1].items():
-                          if router1 not in router_neighbors:
-                              router_neighbors[router1] = []
-                          if router2 not in router_neighbors:
-                              router_neighbors[router2] = []
+                          if router1 not in self.router_neighbors:
+                              self.router_neighbors[router1] = []
+                          if router2 not in self.router_neighbors:
+                              self.router_neighbors[router2] = []
 
                           # Check if the connection already exists to avoid duplication
-                          if not any(neighbor.get(router2) for neighbor in router_neighbors[router1]):
+                          if not any(neighbor.get(router2) for neighbor in self.router_neighbors[router1]):
                               if int(AS[3:]) < int(AS_neighbor[3:]):
                                   ipv6_address1 = f"{self.intent[AS]['address'][:-1]}{self.get_subnet_interconnexion(AS, router1, router2)}{self.intent[AS]['subnet_mask']}"
                                   ipv6_address2 = f"{self.intent[AS]['address'][:-1]}{self.get_subnet_interconnexion(AS_neighbor, router2, router1)}{self.intent[AS]['subnet_mask']}"
@@ -144,6 +148,17 @@ class SubnetsGen:
                                   ipv6_address1 = f"{self.intent[AS]['address'][:-1]}{self.get_subnet_interconnexion(AS_neighbor, router2, router1)}{self.intent[AS]['subnet_mask']}"
                                   ipv6_address2 = f"{self.intent[AS]['address'][:-1]}{self.get_subnet_interconnexion(AS, router1, router2)}{self.intent[AS]['subnet_mask']}"
 
-                              router_neighbors[router1].append({router2: [interface, ipv6_address1, AS_neighbor]})
-                              router_neighbors[router2].append({router1: [interface, ipv6_address2, AS]})
-          return router_neighbors
+                              self.router_neighbors[router1].append({router2: [interface, ipv6_address1, AS_neighbor]})
+                              self.router_neighbors[router2].append({router1: [interface, ipv6_address2, AS]})
+
+      def save_to_json(self, filename: str = "subnets.json") -> None:
+          """
+          Save the router_neighbors configuration to a JSON file.
+          Args:
+              filename (str): The name of the JSON file. Defaults to 'subnets.json'.
+          """
+          with open(filename, "w") as json_file:
+              json.dump(self.router_neighbors, json_file, indent=4)
+
+
+sub = SubnetsGen("intends.json")
