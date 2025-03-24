@@ -1,4 +1,4 @@
-from tools import insert_line, find_index, is_border_router, generate_addresses_dict, give_subnet_dict, give_subnet_interconnexion, get_subnet_interconnexion
+from tools import insert_line, find_index, generate_addresses_dict 
 
 
 def create_base_cfg(base_config: list, router: str) -> None:
