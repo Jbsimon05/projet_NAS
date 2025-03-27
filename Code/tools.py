@@ -31,3 +31,6 @@ def find_index(router: str, line: str) -> int:
             l = file.readline()
             current_index += 1
     return current_index
+
+
+is_border_router = lambda router : router[-2:] == "PE"
