@@ -88,10 +88,10 @@ class SubnetsGen:
                     if router[1:] < neighbor[1:]:
                         subnet_index = self.subnet_dict[AS][(router, neighbor)]
                         router_index = 1
-                    else:
+                    elif self.subnet_dict[AS].get((neighbor, router)):
                         subnet_index = self.subnet_dict[AS][(neighbor, router)]
                         router_index = 2
-                    ipv6_address = f"{self.intent[AS]['address']}{subnet_index}::{router_index}{self.intent[AS]['subnet_mask']}"
+                    ipv6_address = f"{self.intent[AS]['address'][:-1]}{subnet_index}{self.intent[AS]['subnet_mask']}"
                     self.router_neighbors[router].append({neighbor: [interface, ipv6_address, AS]})
 
     def save_to_json(self, filename: str = "subnets.json") -> None:
