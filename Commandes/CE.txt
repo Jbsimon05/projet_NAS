@@ -9,12 +9,13 @@ conf t
         no shutdown 
         exit 
     interface Loopback0 
-        ip address 101.101.101.101
+        ip address 101.101.101.101 255.255.255.255
         no shutdown 
         exit
     router bgp 65001
         bgp router-id 1.1.1.1
-        bgp log-neighbor-changes 
+        bgp log-neighbor-changes
+        bgp default ipv4 
         neighbor 192.168.1.2 remote-as 65000
         neighbor 192.168.1.2 update-source Loopback0 
         neighbor 192.168.1.2 allowas-in 2
@@ -41,12 +42,13 @@ conf t
         no shutdown 
         exit 
     interface Loopback0 
-        ip address 102.102.102.102
+        ip address 102.102.102.102 255.255.255.255
         no shutdown 
         exit
     router bgp 65002
         bgp router-id 2.2.2.2
         bgp log-neighbor-changes 
+        bgp default ipv4
         neighbor 192.168.2.2 remote-as 65000
         neighbor 192.168.2.2 update-source Loopback0 
         neighbor 192.168.2.2 allowas-in 2
@@ -73,12 +75,13 @@ conf t
         no shutdown 
         exit 
     interface Loopback0 
-        ip address 103.103.103.103
+        ip address 103.103.103.103 255.255.255.255
         no shutdown 
         exit
     router bgp 65001
         bgp router-id 3.3.3.3
         bgp log-neighbor-changes 
+        bgp default ipv4
         neighbor 192.168.6.1 remote-as 65000
         neighbor 192.168.6.1 update-source Loopback0 
         neighbor 192.168.6.1 allowas-in 2
@@ -105,12 +108,13 @@ conf t
         no shutdown 
         exit 
     interface Loopback0 
-        ip address 104.104.104.104
+        ip address 104.104.104.104 255.255.255.255
         no shutdown 
         exit
     router bgp 65001
         bgp router-id 4.4.4.4
         bgp log-neighbor-changes 
+        bgp default ipv4
         neighbor 192.168.7.1 remote-as 65000
         neighbor 192.168.7.1 update-source Loopback0 
         neighbor 192.168.7.1 allowas-in 2

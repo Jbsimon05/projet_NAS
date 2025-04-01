@@ -11,15 +11,16 @@ conf t
 		rd 65000:1
 		route-target export 65000:1
 		route-target import 65000:1
+        exit
 	ip vrf CLIENT_B
 		rd 65000:2
 		route-target export 65000:2
 		route-target import 65000:2
+        exit
 
     interface Loopback0 
-        ip address 105.105.105.105
+        ip address 105.105.105.105 255.255.255.255
         ip ospf 1 area 0
-        mpls ip
         no shutdown 
         exit 
     interface GigabitEthernet1/0
@@ -62,7 +63,7 @@ conf t
             neighbor 192.168.2.1 activate
             neighbor 192.168.2.1 send-community extended 
             exit
-            
+
         address-family ipv4 vrf CLIENT_A
             redistribute connected
             exit
@@ -90,15 +91,16 @@ conf t
 		rd 65000:1
 		route-target export 65000:1
 		route-target import 65000:1
+        exit
 	ip vrf CLIENT_B
 		rd 65000:2
 		route-target export 65000:2
 		route-target import 65000:2
+        exit
 
     interface Loopback0 
-        ip address 106.106.106.106
+        ip address 106.106.106.106 255.255.255.255
         ip ospf 1 area 0
-        mpls ip
         no shutdown 
         exit 
     interface GigabitEthernet1/0

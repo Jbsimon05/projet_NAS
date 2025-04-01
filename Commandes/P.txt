@@ -6,19 +6,18 @@ conf t
         router-id 107.107.107.107
         exit 
     interface Loopback0 
-        ip addres 107.107.107.107
+        ip address 107.107.107.107 255.255.255.255
 		ip ospf 1 area 0
-		mpls ip
         no shutdown
 		exit
     interface GigabitEthernet1/0
-        ip addres 192.168.3.2 255.255.255.0
+        ip address 192.168.3.2 255.255.255.0
 		ip ospf 1 area 0
 		mpls ip
         no shutdown
 		exit
     interface GigabitEthernet2/0
-        ip addres 192.168.4.1 255.255.255.0
+        ip address 192.168.4.1 255.255.255.0
 		ip ospf 1 area 0
 		mpls ip
         no shutdown
@@ -35,22 +34,21 @@ conf t
     ip routing 
     mpls ip 
     router ospf 1 
-        router-id 108.108.108.108
+        router-id 108.108.108.108 
         exit 
     interface Loopback0 
-        ip addres 108.108.108.108
+        ip address 108.108.108.108 255.255.255.255
 		ip ospf 1 area 0
-		mpls ip
         no shutdown
 		exit
     interface GigabitEthernet1/0
-        ip addres 192.168.5.1 255.255.255.0
+        ip address 192.168.5.1 255.255.255.0
 		ip ospf 1 area 0
 		mpls ip
         no shutdown
 		exit
     interface GigabitEthernet2/0
-        ip addres 192.168.4.2 255.255.255.0
+        ip address 192.168.4.2 255.255.255.0
 		ip ospf 1 area 0
 		mpls ip
         no shutdown
