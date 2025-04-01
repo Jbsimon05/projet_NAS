@@ -1,4 +1,5 @@
 import json
+from tools import insert_line, find_index
 
 class SubnetsGen:
 
@@ -131,7 +132,7 @@ def create_loopback_interface(router: str) -> None:
     # Insert the loopback part
     insert_line(router, index_line, f"interface Loopback0\n no ip address\n ipv6 address 2001::{router[1:]}/128\n ipv6 enable\n")
 
-def create_interfaces(router: str, topology: dict, AS: str) -> None:
+def create_interfaces(self, router: str, topology: dict, AS: str) -> None:
     """
     Generate the interfaces with the correct IPv6 addresses for each router of each AS.
     Args:
@@ -140,7 +141,7 @@ def create_interfaces(router: str, topology: dict, AS: str) -> None:
         AS (str): The AS identifier.
     """
     # Generate the addresses dictionary
-    addresses_dict = generate_addresses_dict(topology)
+    addresses_dict = self.generate_addresses_dict(topology)
     # Finds the line where to insert the interface
     index_line = find_index(router, line="ip tcp synwait-time 5\n")
     # Iterate over each neighbor in the addresses dictionary
@@ -158,6 +159,37 @@ def create_interfaces(router: str, topology: dict, AS: str) -> None:
             # Increment the index line
             index_line += 5
 
+def update_router_config(router: str, topology: dict, AS: str) -> None:
+    """
+    Update the configuration file of a given router with interface and address configurations.
+    Args:
+        router (str): The router identifier.
+        topology (dict): The network topology.
+        AS (str): The AS identifier.
+    """
+    # Generate the addresses dictionary
+    addresses_dict = SubnetsGen(topology).router_neighbors
+    # Find the line where to insert the interface configurations
+    index_line = find_index(router, line="ip tcp synwait-time 5\n")
+    # Iterate over each neighbor in the addresses dictionary
+    for neighbor_info in addresses_dict[router]:
+        for neighbor, details in neighbor_info.items():
+            interface, ipv6_address, neighbor_AS = details
+            # Insert the lines in the config file for the interface
+            insert_line(router, index_line,
+                f"interface {interface}\n"                                                  # Interface name
+                f" no ip address\n"                                                         # Disable IPv4 addressing
+                f" negotiation auto\n"                                                      # Enable automatic negotiation for the interface
+                f" ipv6 address {ipv6_address}\n"                                           # Assign an IPv6 address
+                f" ipv6 enable\n"                                                           # Enable IPv6 on the interface
+            )
+            # Increment the index line
+            index_line += 5
 
-intent_file = get_intent("intends.json")
-sub = SubnetsGen(intent_file)
+if __name__ == "__main__":
+    # Load topology from intends.json
+    intent_file = get_intent("intends.json")
+    # Test for router Rexample
+    router_name = "Rexample"
+    AS_name = "Backbone"  # Example AS name, adjust as needed
+    update_router_config(router_name, intent_file, AS_name)
