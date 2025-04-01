@@ -100,6 +100,6 @@ if __name__ == "__main__":
         " login",
         "end"
     ]
-    router = "RouterName"
+    router = "Rexample"
     generator = ConfigGen(base_config, router)
     generator.generate_mpls_template()
