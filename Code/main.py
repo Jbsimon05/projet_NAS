@@ -2,47 +2,9 @@ import json
 import time
 
 from config import create_base_cfg
-from interface import create_loopback_interface, create_interfaces
 from protocols import activate_protocols
-
-
-
-
-
-
-# Base configuration for the routers
-base_config = [
-    "version 15.2",
-    "service timestamps debug datetime msec",
-    "service timestamps log datetime msec",
-    "boot-start-marker",
-    "boot-end-marker",
-    "no aaa new-model",
-    "no ip icmp rate-limit unreachable",
-    "ip cef",
-    "no ip domain lookup",
-    "ipv6 unicast-routing",
-    "ipv6 cef",
-    "multilink bundle-name authenticated",
-    "ip tcp synwait-time 5",
-    "ip forward-protocol nd",
-    "no ip http server",
-    "no ip http secure-server",
-    "control-plane",
-    "line con 0",
-    " exec-timeout 0 0",
-    " privilege level 15",
-    " logging synchronous",
-    " stopbits 1",
-    "line aux 0",
-    " exec-timeout 0 0",
-    " privilege level 15",
-    " logging synchronous",
-    " stopbits 1",
-    "line vty 0 4",
-    " login",
-    "end"
-]
+from router import Router
+from subnets import SubnetsGen
 
 
 def main(topology) :
