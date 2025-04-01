@@ -1,5 +1,5 @@
 import json
-from tools import insert_line, find_index
+import ipaddress
 
 class SubnetsGen:
 
@@ -7,9 +7,27 @@ class SubnetsGen:
         self.intent = intent
         self.subnet_dict = {}
         self.router_neighbors = {}
+        self.loopback_interfaces = {}
         
+        self.get_loopback_interfaces()
         self.generate_addresses_dict()
         self.save_to_json()
+        
+    def get_loopback_interfaces(self) -> None:
+        """
+        Generates a dictionary with loopback interfaces for each router in the network.
+        """
+        loopbackref = self.intent["Backbone"]["loopback"]
+        # Iterate over each AS
+        count = 0
+        for AS in self.intent:
+            # Skip non-AS keys
+            # Iterate over each router in the current AS
+            for router in self.intent[AS]['routers'].keys():
+                count += 1
+                ip = ipaddress.ip_network(loopbackref).network_address + count
+                self.loopback_interfaces[router] = f"{ip}/24"
+
         
     def give_subnet_dict(self) -> dict:
         """
@@ -82,18 +100,25 @@ class SubnetsGen:
             # Iterate over each router in the current AS
             for router in self.intent[AS]['routers']:
                 if router not in self.router_neighbors:
-                    self.router_neighbors[router] = []
+                    self.router_neighbors[router] = {}
                 # Iterate over each neighbor of the current router
-                for neighbor, interface in self.intent[AS]['routers'][router].items():
-                    # To ensure it's in the correct order
-                    if router[1:] < neighbor[1:]:
-                        subnet_index = self.subnet_dict[AS][(router, neighbor)]
-                        router_index = 1
-                    elif self.subnet_dict[AS].get((neighbor, router)):
-                        subnet_index = self.subnet_dict[AS][(neighbor, router)]
-                        router_index = 2
-                    ipv6_address = f"{self.intent[AS]['address'][:-1]}{subnet_index}{self.intent[AS]['subnet_mask']}"
-                    self.router_neighbors[router].append({neighbor: [interface, ipv6_address, AS]})
+                for neighbor, interface in {**self.intent[AS]['routers'][router], "abc": "loopback"}.items():
+                    if neighbor != "abc":
+                        # To ensure it's in the correct order
+                        if router[1:] < neighbor[1:]:
+                            subnet_index = self.subnet_dict[AS][(router, neighbor)]
+                            router_index = 1
+                        elif self.subnet_dict[AS].get((neighbor, router)):
+                            subnet_index = self.subnet_dict[AS][(neighbor, router)]
+                            router_index = 2
+                        ipv6_address = f"{self.intent[AS]['address'][:-1]}{subnet_index}{self.intent[AS]['subnet_mask']}"
+                        self.router_neighbors[router][interface] = {
+                            "neighbor": neighbor, 
+                            "ip" : ipv6_address, 
+                            "AS": AS,
+                        }
+                    else:
+                        self.router_neighbors[router][interface] = self.loopback_interfaces[router]
 
     def save_to_json(self, filename: str = "subnets.json") -> None:
         """
@@ -120,76 +145,21 @@ def get_intent(filename: str) -> dict:
     except FileNotFoundError:
         raise FileNotFoundError(f"The file '{filename}' was not found. Please ensure the file exists in the correct path.")
 
+intent_file = get_intent("intends.json")
+sub = SubnetsGen(intent_file)
 
-def create_loopback_interface(router: str) -> None:
-    """
-    Insert the loopback lines at the right place in the config file of a given router.
-    Args:
-        router (str): The router identifier.
-    """
-    # Finds the index of where to insert the loopback part
-    index_line = find_index(router, "ip tcp synwait-time 5\n")
-    # Insert the loopback part
-    insert_line(router, index_line, f"interface Loopback0\n no ip address\n ipv6 address 2001::{router[1:]}/128\n ipv6 enable\n")
 
-def create_interfaces(self, router: str, topology: dict, AS: str) -> None:
-    """
-    Generate the interfaces with the correct IPv6 addresses for each router of each AS.
-    Args:
-        router (str): The router identifier.
-        topology (dict): The network topology.
-        AS (str): The AS identifier.
-    """
-    # Generate the addresses dictionary
-    addresses_dict = self.generate_addresses_dict(topology)
-    # Finds the line where to insert the interface
-    index_line = find_index(router, line="ip tcp synwait-time 5\n")
-    # Iterate over each neighbor in the addresses dictionary
-    for neighbor_info in addresses_dict[router]:
-        for neighbor, details in neighbor_info.items():
-            interface, ipv6_address, neighbor_AS = details
-            # Insert the lines in the config files for the interface
-            insert_line(router, index_line,
-                f"interface {interface}\n"                                                  # Interface name
-                f" no ip address\n"                                                         # Disable IPv4 addressing
-                f" negotiation auto\n"                                                      # Enable automatic negotiation for the interface
-                f" ipv6 address {ipv6_address}\n"                                           # Assign an IPv6 address
-                f" ipv6 enable\n"                                                           # Enable IPv6 on the interface
-            )
-            # Increment the index line
-            index_line += 5
+"""
 
-def update_router_config(router: str, topology: dict, AS: str) -> None:
-    """
-    Update the configuration file of a given router with interface and address configurations.
-    Args:
-        router (str): The router identifier.
-        topology (dict): The network topology.
-        AS (str): The AS identifier.
-    """
-    # Generate the addresses dictionary
-    addresses_dict = SubnetsGen(topology).router_neighbors
-    # Find the line where to insert the interface configurations
-    index_line = find_index(router, line="ip tcp synwait-time 5\n")
-    # Iterate over each neighbor in the addresses dictionary
-    for neighbor_info in addresses_dict[router]:
-        for neighbor, details in neighbor_info.items():
-            interface, ipv6_address, neighbor_AS = details
-            # Insert the lines in the config file for the interface
-            insert_line(router, index_line,
-                f"interface {interface}\n"                                                  # Interface name
-                f" no ip address\n"                                                         # Disable IPv4 addressing
-                f" negotiation auto\n"                                                      # Enable automatic negotiation for the interface
-                f" ipv6 address {ipv6_address}\n"                                           # Assign an IPv6 address
-                f" ipv6 enable\n"                                                           # Enable IPv6 on the interface
-            )
-            # Increment the index line
-            index_line += 5
 
-if __name__ == "__main__":
-    # Load topology from intends.json
-    intent_file = get_intent("intends.json")
-    # Test for router Rexample
-    router_name = "Rexample"
-    AS_name = "Backbone"  # Example AS name, adjust as needed
-    update_router_config(router_name, intent_file, AS_name)
+{
+    "PE1": {
+        "Loopback0": "192.168.1.4/32",
+        "FastEthernet0/0": {
+            "neighbor": "P1",
+            "IP": "192.168.1.4/8",
+            "Area": "Backbone"
+        }
+    }
+"}
+"""
