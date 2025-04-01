@@ -1,69 +1,32 @@
 import json
 import time
+from subnets import SubnetsGen, get_intent
+from router import Router
 
-from addresses import create_base_cfg, create_loopback_interface, create_interfaces
-from protocols import activate_protocols
+def main():
+    # Load the intent from intends.json
+    intent_file = "intends.json"
+    intent = get_intent(intent_file)
 
+    # Generate subnets.json using SubnetsGen
+    subnets_gen = SubnetsGen(intent)
+    subnets = subnets_gen.router_neighbors  # Dictionary with subnets information
 
-base_config = [
-    "version 15.2",
-    "service timestamps debug datetime msec",
-    "service timestamps log datetime msec",
-    "boot-start-marker",
-    "boot-end-marker",
-    "no aaa new-model",
-    "no ip icmp rate-limit unreachable",
-    "ip cef",
-    "no ip domain lookup",
-    "ipv6 unicast-routing",
-    "ipv6 cef",
-    "multilink bundle-name authenticated",
-    "ip tcp synwait-time 5",
-    "ip forward-protocol nd",
-    "no ip http server",
-    "no ip http secure-server",
-    "control-plane",
-    "line con 0",
-    " exec-timeout 0 0",
-    " privilege level 15",
-    " logging synchronous",
-    " stopbits 1",
-    "line aux 0",
-    " exec-timeout 0 0",
-    " privilege level 15",
-    " logging synchronous",
-    " stopbits 1",
-    "line vty 0 4",
-    " login",
-    "end"
-]
+    # Save subnets.json
+    subnets_gen.save_to_json()
 
+    # Generate configuration files for each router
+    for router_name in subnets:
+        router = Router(router_name, intent, subnets)
+        config = router.generate_routing_file()
 
-def main(topology) :
-    """
-    Main function to configure routers based on the given topology.
-    Args:
-        topology (dict): The network topology.
-    """
-    for AS in topology :
-        for router in topology[AS]['routers'] :
-            # Create a blank config file
-            create_base_cfg(base_config, router)
-            # Configure Loopback0 interface
-            create_loopback_interface(router)
-            # Configure IPv6 addressing
-            create_interfaces(router, topology, AS)
-            # Activate RIP, OSPF, and BGP protocols
-            activate_protocols(AS, router, topology)
-
+        # Save the configuration to a .cfg file
+        config_filename = f"{router_name}.cfg"
+        with open(config_filename, "w") as config_file:
+            config_file.write(config)
 
 if __name__ == "__main__":
-    with open("intends.json", "r") as file:
-        # Load topology from JSON file
-        topology = json.load(file)
     start = time.time()
-    main(topology)
+    main()
     end = time.time()
     print("Total execution time:", end - start)
-
-# Execute move_files with the correct path

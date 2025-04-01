@@ -1,4 +1,5 @@
 import json
+import ipaddress
 
 class SubnetsGen:
 
@@ -6,9 +7,27 @@ class SubnetsGen:
         self.intent = intent
         self.subnet_dict = {}
         self.router_neighbors = {}
+        self.loopback_interfaces = {}
         
+        self.get_loopback_interfaces()
         self.generate_addresses_dict()
         self.save_to_json()
+        
+    def get_loopback_interfaces(self) -> None:
+        """
+        Generates a dictionary with loopback interfaces for each router in the network.
+        """
+        loopbackref = self.intent["Backbone"]["loopback"]
+        # Iterate over each AS
+        count = 0
+        for AS in self.intent:
+            # Skip non-AS keys
+            # Iterate over each router in the current AS
+            for router in self.intent[AS]['routers'].keys():
+                count += 1
+                ip = ipaddress.ip_network(loopbackref).network_address + count
+                self.loopback_interfaces[router] = f"{ip}/24"
+
         
     def give_subnet_dict(self) -> dict:
         """
@@ -81,18 +100,25 @@ class SubnetsGen:
             # Iterate over each router in the current AS
             for router in self.intent[AS]['routers']:
                 if router not in self.router_neighbors:
-                    self.router_neighbors[router] = []
+                    self.router_neighbors[router] = {}
                 # Iterate over each neighbor of the current router
-                for neighbor, interface in self.intent[AS]['routers'][router].items():
-                    # To ensure it's in the correct order
-                    if router[1:] < neighbor[1:]:
-                        subnet_index = self.subnet_dict[AS][(router, neighbor)]
-                        router_index = 1
+                for neighbor, interface in {**self.intent[AS]['routers'][router], "abc": "loopback"}.items():
+                    if neighbor != "abc":
+                        # To ensure it's in the correct order
+                        if router[1:] < neighbor[1:]:
+                            subnet_index = self.subnet_dict[AS][(router, neighbor)]
+                            router_index = 1
+                        elif self.subnet_dict[AS].get((neighbor, router)):
+                            subnet_index = self.subnet_dict[AS][(neighbor, router)]
+                            router_index = 2
+                        ipv6_address = f"{self.intent[AS]['address'][:-1]}{subnet_index}{self.intent[AS]['subnet_mask']}"
+                        self.router_neighbors[router][interface] = {
+                            "neighbor": neighbor, 
+                            "ip" : ipv6_address, 
+                            "AS": AS,
+                        }
                     else:
-                        subnet_index = self.subnet_dict[AS][(neighbor, router)]
-                        router_index = 2
-                    ipv6_address = f"{self.intent[AS]['address']}{subnet_index}::{router_index}{self.intent[AS]['subnet_mask']}"
-                    self.router_neighbors[router].append({neighbor: [interface, ipv6_address, AS]})
+                        self.router_neighbors[router][interface] = self.loopback_interfaces[router]
 
     def save_to_json(self, filename: str = "subnets.json") -> None:
         """
@@ -119,6 +145,21 @@ def get_intent(filename: str) -> dict:
     except FileNotFoundError:
         raise FileNotFoundError(f"The file '{filename}' was not found. Please ensure the file exists in the correct path.")
 
-
 intent_file = get_intent("intends.json")
 sub = SubnetsGen(intent_file)
+
+
+"""
+
+
+{
+    "PE1": {
+        "Loopback0": "192.168.1.4/32",
+        "FastEthernet0/0": {
+            "neighbor": "P1",
+            "IP": "192.168.1.4/8",
+            "Area": "Backbone"
+        }
+    }
+"}
+"""
