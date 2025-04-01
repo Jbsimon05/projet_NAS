@@ -1,0 +1,47 @@
+#R1
+conf t
+    interface GigabitEthernet1/0
+        ip address 10.10.10.1 255.255.255.0
+        no shutdown
+        exit
+    end 
+write
+
+
+
+
+
+#R2
+conf t
+    interface GigabitEthernet1/0
+        ip address 10.10.10.1 255.255.255.0
+        no shutdown
+        exit
+    end 
+write
+
+
+
+
+
+#R3
+conf t
+    interface GigabitEthernet1/0
+        ip address 10.10.10.4 255.255.255.0
+        no shutdown
+        exit
+    end 
+write
+
+
+
+
+
+#R4
+conf t
+    interface GigabitEthernet1/0
+        ip address 10.10.10.4 255.255.255.0
+        no shutdown
+        exit
+    end 
+write

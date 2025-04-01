@@ -1,0 +1,79 @@
+Légende :
+() = Pas obligatoire
+# = Commentaires
+
+
+
+enable
+conf t
+	ip routing
+	mpls ip
+	(mpls ldp router-id Loopback0 force)
+	router ospf 1
+		router-id X.X.X.X
+		exit
+	interface GigabitEthernet…/0
+		ip address … 255.255.255.252 
+		no shutdown
+		ip ospf 1 area 0
+		mpls ip
+		exit
+	interface Loopback0
+		ip addres 192.168.X.X/32 
+		ip ospf 1 area 0
+		mpls ip
+		exit
+# Uniquement sur les PE
+	router bgp … 
+		bgp router-id X.X.X.X
+		bgp default ipv4
+		bgp log-neighbor-changes
+		neighbor …  remote-as …
+		neighbor ... update-source Loopback0
+
+		# Pour la com PE-PE
+		address-family vpnv4
+			neighbor ... activate
+			neighbor ... send-community extended
+		exit 
+
+	#Activer les VRF
+	ip vrf CLIENT_A
+		rd 65000:1
+		route-target export 65000:1
+		route-target import 65000:1
+	ip vrf CLIENT_B
+		rd 65000:2
+		route-target export 65000:2
+		route-target import 65000:2
+	
+	#Link les VFR aux interfaces
+	interface GigabitEthernet.../0
+		ip vrf forwarding CLIENT_A 
+		ip address ... 255.255.255.252
+		no shutdown
+	interface GigabitEthernet.../0
+		ip vrf forwarding CLIENT_B 
+		ip address ... 255.255.255.252
+		no shutdown
+		
+	exit
+write
+
+
+
+
+# POUR LES CE
+conf t
+	interface GigabitEthernet.../0
+		ip addres ... 255.255.255.252
+		no shutdown
+		exit 
+	router bgp (65001 pour client A et 65002 pour client B)
+		bgp router-id X.X.X.X
+		bgp log-neighbor-changes 
+		neighbor ... remote-as 65000
+		address-family ipv4 
+			neighbor ... activate # Son voisin PE
+			network ... mask ... #Ce qu'il veut envoyer de l'autre coté du backbone
+			exit

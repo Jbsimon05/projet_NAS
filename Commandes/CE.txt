@@ -1,0 +1,123 @@
+# CE1 
+conf t 
+    interface GigabitEthernet1/0
+        ip address 10.10.10.2 255.255.255.0
+        no shutdown 
+        exit 
+    interface GigabitEthernet2/0
+        ip address 192.168.1.1 255.255.255.0
+        no shutdown 
+        exit 
+    interface Loopback0 
+        ip address 101.101.101.101
+        no shutdown 
+        exit
+    router bgp 65001
+        bgp router-id 1.1.1.1
+        bgp log-neighbor-changes 
+        neighbor 192.168.1.2 remote-as 65000
+        neighbor 192.168.1.2 update-source Loopback0 
+        neighbor 192.168.1.2 allowas-in 2
+        address-family ipv4 
+            neighbor 192.168.1.2 activate
+            network 10.10.10.0 mask 255.255.255.0
+            exit 
+        exit 
+    exit 
+write
+
+
+
+
+
+# CE2 
+conf t 
+    interface GigabitEthernet1/0
+        ip address 10.10.10.2 255.255.255.0
+        no shutdown 
+        exit 
+    interface GigabitEthernet3/0
+        ip address 192.168.2.1 255.255.255.0
+        no shutdown 
+        exit 
+    interface Loopback0 
+        ip address 102.102.102.102
+        no shutdown 
+        exit
+    router bgp 65002
+        bgp router-id 2.2.2.2
+        bgp log-neighbor-changes 
+        neighbor 192.168.2.2 remote-as 65000
+        neighbor 192.168.2.2 update-source Loopback0 
+        neighbor 192.168.2.2 allowas-in 2
+        address-family ipv4 
+            neighbor 192.168.2.2 activate
+            network 10.10.10.0 mask 255.255.255.0
+            exit 
+        exit 
+    exit 
+write
+
+
+
+
+
+# CE3 
+conf t 
+    interface GigabitEthernet1/0
+        ip address 10.10.10.3 255.255.255.0
+        no shutdown 
+        exit 
+    interface GigabitEthernet2/0
+        ip address 192.168.6.2 255.255.255.0
+        no shutdown 
+        exit 
+    interface Loopback0 
+        ip address 103.103.103.103
+        no shutdown 
+        exit
+    router bgp 65001
+        bgp router-id 3.3.3.3
+        bgp log-neighbor-changes 
+        neighbor 192.168.6.1 remote-as 65000
+        neighbor 192.168.6.1 update-source Loopback0 
+        neighbor 192.168.6.1 allowas-in 2
+        address-family ipv4 
+            neighbor 192.168.6.1 activate
+            network 10.10.10.0 mask 255.255.255.0
+            exit 
+        exit 
+    exit 
+write
+
+
+
+
+
+# CE4 
+conf t 
+    interface GigabitEthernet1/0
+        ip address 10.10.10.3 255.255.255.0
+        no shutdown 
+        exit 
+    interface GigabitEthernet3/0
+        ip address 192.168.7.2 255.255.255.0
+        no shutdown 
+        exit 
+    interface Loopback0 
+        ip address 104.104.104.104
+        no shutdown 
+        exit
+    router bgp 65001
+        bgp router-id 4.4.4.4
+        bgp log-neighbor-changes 
+        neighbor 192.168.7.1 remote-as 65000
+        neighbor 192.168.7.1 update-source Loopback0 
+        neighbor 192.168.7.1 allowas-in 2
+        address-family ipv4 
+            neighbor 192.168.7.1 activate
+            network 10.10.10.0 mask 255.255.255.0
+            exit 
+        exit 
+    exit 
+write
