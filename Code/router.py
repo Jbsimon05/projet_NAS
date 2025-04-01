@@ -1,14 +1,23 @@
 from tools import *
+from template import *
 
 class Router:
     
-    def __init__(self, intent:dict):
+    def __init__(self, router_name:str, intent:dict, subnets:dict):
         """
         content = contenu du fichier de configuration
         """
-        self.content = ""
+        self.file = ""
+        self.router_name = router_name
         self.intent = intent
+        self.subnets = subnets
     
-    def generate_base(self):
+    def generate_config(self):
+        self.file += INIT_CONFIG(self.router_name)
+
+
+    def generate_interfaces(self):
+        """
+        Génère la configuration des interfaces pour le routeur.
+        """
         ...
-    
