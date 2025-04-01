@@ -1,29 +1,20 @@
 import json
 import time
 
-from config import create_base_cfg
-from protocols import activate_protocols
 from router import Router
-from subnets import SubnetsGen
-
 
 def main(topology) :
-    """
-    Main function to configure routers based on the given topology.
-    Args:
-        topology (dict): The network topology.
-    """
     for AS in topology :
         for router in topology[AS]['routers'] :
-            # Create a blank config file
-            create_base_cfg(base_config, router)
-            # Configure Loopback0 interface
-            create_loopback_interface(router)
-            # Configure IPv6 addressing
-            create_interfaces(router, topology, AS)
-            # Activate RIP, OSPF, and BGP protocols
-            activate_protocols(AS, router, topology)
-
+            # Create a Router object for each router in the topology
+            router_obj = Router(router, topology[AS]['routers'][router], topology[AS]['subnets'])
+            # Generate the configuration file for the router
+            config = router_obj.generate_routing_file()
+            # Write the configuration to a file
+            with open(f"{router}.cfg", "w") as file:
+                file.write(config)
+            # Print the configuration to the console 
+            print(config)
 
 if __name__ == "__main__":
     with open("intends.json", "r") as file:

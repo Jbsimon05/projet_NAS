@@ -1,5 +1,5 @@
 from template import *
-from tools import insert_line, find_index, get_subnet, get_reversed_mask, get_ip_and_mask
+from tools import insert_line, find_index, get_subnet, get_reversed_mask
 
 class Router:
 
