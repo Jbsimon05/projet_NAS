@@ -21,3 +21,26 @@ def find_index(filename, line: str) -> int:
     with open(filename, 'r') as file:
         lines = file.readlines()
     return lines.index(line)
+
+##############################################################################
+
+def example_tool_function(param: str) -> str:
+    """
+    Exemple de fonction outil.
+    Args:
+        param (str): Une chaîne de caractères en entrée.
+    Returns:
+        str: Une chaîne de caractères modifiée.
+    """
+    return f"Processed: {param}"
+
+def main():
+    """
+    Fonction principale pour tester les outils.
+    """
+    print("Testing tools...")
+    result = example_tool_function("Test input")
+    print(f"Result: {result}")
+
+if __name__ == "__main__":
+    main()

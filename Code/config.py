@@ -1,22 +1,22 @@
 import os
-from template import *
 
-class ConfigGenerator:
+class ConfigGen:
     """
     Classe ConfigGenerator pour générer des fichiers de configuration de routeurs.
     Permet de créer des fichiers de configuration de base, d'insérer des lignes spécifiques,
     de trouver des indices de lignes et de générer des templates de configuration MPLS.
     """
 
-    def __init__(self, router_name: str, config_num: int) -> None:
+    def __init__(self, base_config: list, router: str):
         """
         Initialise le générateur de configuration avec une configuration de base et un identifiant de routeur.
         Args:
             base_config (list): Les lignes de configuration de base.
             router (str): L'identifiant du routeur.
         """
-        self.router_name = router_name
-        self.filename = f"i{config_num}_startup-config.cfg"
+        self.base_config = base_config
+        self.router = router
+        self.filename = f"i{router[1:]}_startup-config.cfg"
 
     def create_base_cfg(self) -> None:
         """
@@ -101,5 +101,5 @@ if __name__ == "__main__":
         "end"
     ]
     router = "RouterName"
-    generator = ConfigGenerator(base_config, router)
+    generator = ConfigGen(base_config, router)
     generator.generate_mpls_template()
