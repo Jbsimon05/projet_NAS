@@ -1,4 +1,4 @@
-from tools import *
+from tools import get_subnet, get_reversed_mask
 from template import *
 
 class Router:
@@ -23,7 +23,14 @@ class Router:
         ...
         
     def generate_igp(self):
-        ...
+        self.file += "router ospf 1\n"
+
+        for neighbor in self.subnets[self.router_name].keys():
+            self.file += " network {} {} area 0\n".format(
+                get_subnet(self.subnets[self.router_name][neighbor][1]),
+                get_reversed_mask(self.subnets[self.router_name][neighbor][1])
+            )
+
         
     def generate_finale_config(self):
         self.file += FINAL_CONFIG
