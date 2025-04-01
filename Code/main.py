@@ -2,7 +2,7 @@ import json
 import time
 
 from config import create_base_cfg
-from interfaces import create_loopback_interface, create_interfaces
+from interface import create_loopback_interface, create_interfaces
 from protocols import activate_protocols
 
 # Base configuration for the routers

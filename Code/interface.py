@@ -1,4 +1,5 @@
-from tools import insert_line, find_index, generate_addresses_dict 
+from tools import insert_line, find_index
+from subnetsGen import generate_addresses_dict
 
 
 

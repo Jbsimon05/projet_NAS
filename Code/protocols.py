@@ -1,4 +1,4 @@
-from tools import insert_line, find_index, is_border_router
+from tools import insert_line, find_index
 import json
 
 

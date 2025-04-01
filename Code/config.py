@@ -1,48 +1,104 @@
-def create_base_cfg(base_config: list, router: str) -> None:
-    """
-    Creates the base config file named iX_startup-config.cfg with X being the number/name of the router.
-    Args:
-        base_config (list): The base configuration lines.
-        router (str): The router identifier.
-    The file contains all the lines from the base_config list plus the hostname of the router.
-    """
-    # Writes the base_config in the config file
-    with open(f'i{router[1:]}_startup-config.cfg', 'w') as file:
-        for entry in base_config:
-            file.write(entry + '\n')
-    # Writes the hostname in the config file
-    insert_line(router, 3, f"hostname {router}\n")
+import os
 
-def insert_line(router: str, index_line: int, data: str) -> None:
+class ConfigGenerator:
     """
-    For a given router, insert the data at index_line in its config file.
-    Args:
-        router (str): The router identifier.
-        index_line (int): The line index where the data should be inserted.
-        data (str): The data to be inserted.
+    Classe ConfigGenerator pour générer des fichiers de configuration de routeurs.
+    Permet de créer des fichiers de configuration de base, d'insérer des lignes spécifiques,
+    de trouver des indices de lignes et de générer des templates de configuration MPLS.
     """
-    # Get the lines in the file and insert the new one
-    with open(f"i{router[1:]}_startup-config.cfg", 'r') as file :
-        lines = file.readlines()
+
+    def __init__(self, base_config: list, router: str):
+        """
+        Initialise le générateur de configuration avec une configuration de base et un identifiant de routeur.
+        Args:
+            base_config (list): Les lignes de configuration de base.
+            router (str): L'identifiant du routeur.
+        """
+        self.base_config = base_config
+        self.router = router
+        self.filename = f"i{router[1:]}_startup-config.cfg"
+
+    def create_base_cfg(self) -> None:
+        """
+        Crée un fichier de configuration de base avec le nom d'hôte du routeur.
+        Écrit les lignes de configuration de base et ajoute une ligne pour le nom d'hôte.
+        """
+        with open(self.filename, 'w') as file:
+            for entry in self.base_config:
+                file.write(entry + '\n')
+        self.insert_line(3, f"hostname {self.router}\n")
+
+    def insert_line(self, index_line: int, data: str) -> None:
+        """
+        Insère une ligne de données à un index spécifique dans le fichier de configuration.
+        Args:
+            index_line (int): L'index de la ligne où insérer les données.
+        """
+        with open(self.filename, 'r') as file:
+            lines = file.readlines()
         lines.insert(index_line, data)
-    # Writes the updated list in the file
-    with open(f"i{router[1::]}_startup-config.cfg", 'w') as file :
-        file.writelines(lines)
+        with open(self.filename, 'w') as file:
+            file.writelines(lines)
 
-def find_index(router: str, line: str) -> int:
+    def find_index(self, line: str) -> int:
+        """
+        Trouve l'index d'une ligne spécifique dans le fichier de configuration.
+        Args:
+            line (str): La ligne à rechercher dans le fichier de configuration.
+        Returns:
+            int: L'index de la ligne dans le fichier de configuration.
+        """
+        with open(self.filename, 'r') as file:
+            lines = file.readlines()
+        return lines.index(line)
+
+    def generate_mpls_template(self) -> None:
+        """
+        Génère un template de configuration MPLS pour le routeur.
+        Ajoute les lignes nécessaires pour activer le protocole MPLS.
+        """
+        self.create_base_cfg()
+        self.insert_line(10, "mpls label protocol ldp\n")
+        self.insert_line(20, "mpls ip\n")
+        print(f"Template de configuration MPLS généré pour {self.router} dans {self.filename}.")
+
+if __name__ == "__main__":
     """
-    For a given router, finds the index of a given line in its config file.
-    Args:
-        router (str): The router identifier.
-        line (str): The line to find in the config file.
-    Returns:
-        int: The index of the line in the config file.
+    Point d'entrée principal du script.
+    Initialise une configuration de base et génère un template de configuration MPLS
+    pour un routeur donné.
     """
-    current_index = 1
-    with open(f'i{router[1:]}_startup-config.cfg', 'r') as file:
-        # Browses the lines to find the wanted one
-        l = file.readline()
-        while l != line:
-            l = file.readline()
-            current_index += 1
-    return current_index
+    base_config = [
+        "version 15.2",
+        "service timestamps debug datetime msec",
+        "service timestamps log datetime msec",
+        "boot-start-marker",
+        "boot-end-marker",
+        "no aaa new-model",
+        "no ip icmp rate-limit unreachable",
+        "ip cef",
+        "no ip domain lookup",
+        "no ipv6 cef",
+        "multilink bundle-name authenticated",
+        "ip tcp synwait-time 5",
+        "ip forward-protocol nd",
+        "no ip http server",
+        "no ip http secure-server",
+        "control-plane",
+        "line con 0",
+        " exec-timeout 0 0",
+        " privilege level 15",
+        " logging synchronous",
+        " stopbits 1",
+        "line aux 0",
+        " exec-timeout 0 0",
+        " privilege level 15",
+        " logging synchronous",
+        " stopbits 1",
+        "line vty 0 4",
+        " login",
+        "end"
+    ]
+    router = "PexampleRouter"
+    generator = ConfigGenerator(base_config, router)
+    generator.generate_mpls_template()
