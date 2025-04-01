@@ -12,7 +12,7 @@ class Router:
         self.intent = intent
         self.subnets = subnets
     
-    def generate_config(self):
+    def generate_init_config(self):
         self.file += INIT_CONFIG(self.router_name)
 
 
@@ -21,3 +21,9 @@ class Router:
         Génère la configuration des interfaces pour le routeur.
         """
         ...
+
+    def generate_routing_file(self):
+        self.generate_init_config()
+        self.generate_interfaces()
+        
+        return self.file
