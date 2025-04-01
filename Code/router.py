@@ -21,9 +21,19 @@ class Router:
         Génère la configuration des interfaces pour le routeur.
         """
         ...
+        
+    def generate_igp(self):
+        ...
+        
+    def generate_finale_config(self):
+        self.file += FINAL_CONFIG
 
     def generate_routing_file(self):
         self.generate_init_config()
+
         self.generate_interfaces()
+        self.generate_igp()
+
+        self.generate_finale_config()
         
         return self.file
