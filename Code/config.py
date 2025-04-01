@@ -1,5 +1,3 @@
-import os
-
 class ConfigGen:
     """
     Classe ConfigGenerator pour générer des fichiers de configuration de routeurs.
@@ -63,7 +61,7 @@ class ConfigGen:
         # debugging
         # print(f"Template de configuration MPLS généré pour {self.router} dans {self.filename}.")
 
-if __name__ == "__main__":
+def main():
     """
     Code de test pour la classe ConfigGenerator.
     Crée une instance de ConfigGenerator avec une configuration de base et un routeur donné.
@@ -100,6 +98,9 @@ if __name__ == "__main__":
         " login",
         "end"
     ]
-    router = "Rexample"
+    router = "test"
     generator = ConfigGen(base_config, router)
     generator.generate_mpls_template()
+
+if __name__ == "__main__":
+    main()
