@@ -1,6 +1,6 @@
 import os
 
-class ConfigGenerator:
+class ConfigGen:
     """
     Classe ConfigGenerator pour générer des fichiers de configuration de routeurs.
     Permet de créer des fichiers de configuration de base, d'insérer des lignes spécifiques,
