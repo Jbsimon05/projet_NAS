@@ -60,13 +60,14 @@ class ConfigGenerator:
         self.create_base_cfg()
         self.insert_line(10, "mpls label protocol ldp\n")
         self.insert_line(20, "mpls ip\n")
-        print(f"Template de configuration MPLS généré pour {self.router} dans {self.filename}.")
+        # debugging
+        # print(f"Template de configuration MPLS généré pour {self.router} dans {self.filename}.")
 
 if __name__ == "__main__":
     """
-    Point d'entrée principal du script.
-    Initialise une configuration de base et génère un template de configuration MPLS
-    pour un routeur donné.
+    Code de test pour la classe ConfigGenerator.
+    Crée une instance de ConfigGenerator avec une configuration de base et un routeur donné.
+    Génère un template de configuration MPLS pour le routeur spécifié.
     """
     base_config = [
         "version 15.2",
@@ -99,6 +100,6 @@ if __name__ == "__main__":
         " login",
         "end"
     ]
-    router = "PexampleRouter"
+    router = "RouterName"
     generator = ConfigGenerator(base_config, router)
     generator.generate_mpls_template()
