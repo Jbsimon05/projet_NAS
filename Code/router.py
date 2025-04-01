@@ -21,7 +21,12 @@ class Router:
         Génère la configuration des interfaces pour le routeur.
         """
         for interface, specs in self.subnets[self.router_name].items():
-            ip, mask = get_ip_and_mask(specs["IP"])
+            if interface == "loopback":
+                ip = get_subnet(specs)
+                mask = get_reversed_mask(specs)
+            else:
+                ip = get_subnet(specs["ip"])
+                mask = get_reversed_mask(specs["ip"])
             self.file += f"interface {interface}\n"
             self.file += f" ip address {ip} {mask}\n"
             if "duplex" in specs:

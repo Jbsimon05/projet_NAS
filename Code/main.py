@@ -1,28 +1,32 @@
 import json
 import time
-
+from subnets import SubnetsGen, get_intent
 from router import Router
 
-def main(topology) :
-    for AS in topology :
-        for router in topology[AS]['routers'] :
-            # Create a Router object for each router in the topology
-            router_obj = Router(router, topology[AS]['routers'][router], topology[AS]['subnets'])
-            # Generate the configuration file for the router
-            config = router_obj.generate_routing_file()
-            # Write the configuration to a file
-            with open(f"{router}.cfg", "w") as file:
-                file.write(config)
-            # Print the configuration to the console 
-            print(config)
+def main():
+    # Load the intent from intends.json
+    intent_file = "intends.json"
+    intent = get_intent(intent_file)
+
+    # Generate subnets.json using SubnetsGen
+    subnets_gen = SubnetsGen(intent)
+    subnets = subnets_gen.router_neighbors  # Dictionary with subnets information
+
+    # Save subnets.json
+    subnets_gen.save_to_json()
+
+    # Generate configuration files for each router
+    for router_name in subnets:
+        router = Router(router_name, intent, subnets)
+        config = router.generate_routing_file()
+
+        # Save the configuration to a .cfg file
+        config_filename = f"{router_name}.cfg"
+        with open(config_filename, "w") as config_file:
+            config_file.write(config)
 
 if __name__ == "__main__":
-    with open("intends.json", "r") as file:
-        # Load topology from JSON file
-        topology = json.load(file)
     start = time.time()
-    main(topology)
+    main()
     end = time.time()
     print("Total execution time:", end - start)
-
-# Execute move_files with the correct path
