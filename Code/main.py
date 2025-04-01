@@ -5,6 +5,11 @@ from config import create_base_cfg
 from interface import create_loopback_interface, create_interfaces
 from protocols import activate_protocols
 
+
+
+
+
+
 # Base configuration for the routers
 base_config = [
     "version 15.2",
