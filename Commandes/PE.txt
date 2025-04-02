@@ -30,18 +30,18 @@ conf t
         no shutdown 
         exit 
     interface GigabitEthernet2/0
+        ip vrf forwarding CLIENT_A 
         ip address 192.168.1.2 255.255.255.0
         ip ospf 1 area 0
         mpls ip
         no shutdown 
-        ip vrf forwarding CLIENT_A 
         exit 
     interface GigabitEthernet3/0
+        ip vrf forwarding CLIENT_B 
         ip address 192.168.2.2 255.255.255.0
         ip ospf 1 area 0
         mpls ip
         no shutdown 
-        ip vrf forwarding CLIENT_B 
         exit 
     
     router bgp 65000
@@ -110,18 +110,18 @@ conf t
         no shutdown 
         exit 
     interface GigabitEthernet2/0
+        ip vrf forwarding CLIENT_A 
         ip address 192.168.6.1 255.255.255.0
         ip ospf 1 area 0
         mpls ip
         no shutdown 
-        ip vrf forwarding CLIENT_A 
         exit 
     interface GigabitEthernet3/0
+        ip vrf forwarding CLIENT_B
         ip address 192.168.7.1 255.255.255.0
         ip ospf 1 area 0
         mpls ip
         no shutdown 
-        ip vrf forwarding CLIENT_B 
         exit 
     
     router bgp 65000
