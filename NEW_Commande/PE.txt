@@ -1,0 +1,83 @@
+#PE_1
+conf t 
+    hostname PE_1 
+    ip routing 
+    mpls ip 
+
+    router ospf 1
+        router-id 100.0.0.1
+
+    ip vrf CLIENT_A
+		rd 65000:1
+		route-target export 65000:1
+		route-target import 65000:1
+        exit
+    
+    interface GigabitEthernet2/0 
+        ip vrf forwarding CLIENT_A 
+        ip address 192.168.1.2 255.255.255.0
+        no shutdown
+        exit 
+    
+    interface Loopback0 
+        ip address 100.0.0.1 255.255.255.255
+        ip ospf 1 area 0
+        no shutdown
+        exit 
+
+    router bgp 65000
+        bgp router-id 100.0.0.1
+        bgp default ipv4 
+        bgp log-neighbor-changes
+
+        address-family ipv4 vrf CLIENT_A
+            neighbor 192.168.1.1 remote-as 65001
+            neighbor 192.168.1.1 activate
+            exit
+        exit 
+    exit 
+write
+
+
+
+
+
+#PE_2
+conf t 
+    hostname PE_2 
+    ip routing 
+    mpls ip 
+
+    router ospf 1
+        router-id 100.0.0.2
+
+    ip vrf CLIENT_A
+		rd 65000:1
+		route-target export 65000:1
+		route-target import 65000:1
+        exit
+    
+    interface GigabitEthernet2/0 
+        ip vrf forwarding CLIENT_A 
+        ip address 192.168.6.1 255.255.255.0
+        no shutdown
+        exit 
+    
+    interface Loopback0 
+        ip address 100.0.0.2 255.255.255.255
+        ip ospf 1 area 0
+        no shutdown
+        exit 
+
+    router bgp 65000
+        bgp router-id 100.0.0.2
+        bgp default ipv4 
+        bgp log-neighbor-changes
+
+        address-family ipv4 vrf CLIENT_A
+            neighbor 192.168.6.2 remote-as 65001
+            neighbor 192.168.6.2 activate
+            exit
+        exit 
+    exit 
+write

@@ -1,0 +1,75 @@
+#CE 1
+conf t 
+    hostname CE_1 
+    interface GigabitEthernet1/0 
+        ip address 10.10.10.2 255.255.255.0 
+        no shutdown
+        exit 
+    
+    interface GigabitEthernet2/0
+        ip address 192.168.1.1 255.255.255.0
+        no shutdown
+        exit
+        
+    interface Loopback0
+        ip address 101.0.0.1 255.255.255.255
+        no shutdown
+        exit
+
+    router bgp 65001
+        bgp router-id 101.0.0.1
+        bgp log-neighbor-changes
+        bgp default ipv4 
+        neighbor 192.168.1.2 remote-as 65000
+
+        address-family ipv4 
+            neighbor 192.168.1.2 activate
+            neighbor 192.168.1.2 send-community both
+            neighbor 192.168.1.2 allowas-in 5
+            network 10.10.10.0 mask 255.255.255.0
+            network 192.168.1.0 mask 255.255.255.0
+            network 101.0.0.1 mask 255.255.255.255
+            exit
+        exit
+    exit 
+write
+
+
+
+
+
+#CE 2
+conf t 
+    hostname CE_2 
+    interface GigabitEthernet1/0 
+        ip address 10.10.10.3 255.255.255.0 
+        no shutdown
+        exit 
+    
+    interface GigabitEthernet2/0
+        ip address 192.168.6.2 255.255.255.0
+        no shutdown
+        exit
+        
+    interface Loopback0
+        ip address 101.0.0.2 255.255.255.255
+        no shutdown
+        exit
+
+    router bgp 65001
+        bgp router-id 101.0.0.2
+        bgp log-neighbor-changes
+        bgp default ipv4 
+        neighbor 192.168.6.1 remote-as 65000
+
+        address-family ipv4 
+            neighbor 192.168.6.1 activate
+            neighbor 192.168.6.1 send-community both
+            neighbor 192.168.6.1 allowas-in 5
+            network 10.10.10.0 mask 255.255.255.0
+            network 192.168.6.0 mask 255.255.255.0
+            network 101.0.0.2 mask 255.255.255.255
+            exit
+        exit
+    exit 
+write

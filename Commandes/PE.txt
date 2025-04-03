@@ -1,10 +1,12 @@
 #PE1
 conf t
-
+    hostname PE1
     ip routing 
     mpls ip 
     router ospf 1
         router-id 105.105.105.105
+        passive-interface GigabitEthernet2/0
+        passive-interface GigabitEthernet3/0
         exit 
 
     ip vrf CLIENT_A
@@ -33,14 +35,12 @@ conf t
         ip vrf forwarding CLIENT_A 
         ip address 192.168.1.2 255.255.255.0
         ip ospf 1 area 0
-        mpls ip
         no shutdown 
         exit 
     interface GigabitEthernet3/0
         ip vrf forwarding CLIENT_B 
         ip address 192.168.2.2 255.255.255.0
         ip ospf 1 area 0
-        mpls ip
         no shutdown 
         exit 
     
@@ -50,25 +50,25 @@ conf t
         bgp log-neighbor-changes
         neighbor 192.168.5.2 remote-as 65000
         neighbor 192.168.5.2 update-source Loopback0  
-        neighbor 192.168.1.1 remote-as 65001
-        neighbor 192.168.1.1 update-source Loopback0 
-        neighbor 192.168.2.1 remote-as 65002
-        neighbor 192.168.2.1 update-source Loopback0 
     
         address-family vpnv4 
             neighbor 192.168.5.2 activate
-            neighbor 192.168.5.2 send-community extended 
-            neighbor 192.168.1.1 activate
-            neighbor 192.168.1.1 send-community extended 
-            neighbor 192.168.2.1 activate
-            neighbor 192.168.2.1 send-community extended 
+            neighbor 192.168.5.2 send-community both 
+            exit
+        
+        address-family ipv4 
+            neighbor 192.168.5.2 activate
+            neighbor 192.168.5.2 send-community both 
+            network 105.105.105.105 mask 255.255.255.255
             exit
 
         address-family ipv4 vrf CLIENT_A
-            redistribute connected
+            neighbor 192.168.1.1 remote-as 65001
+            neighbor 192.168.1.1 activate
             exit
         address-family ipv4 vrf CLIENT_B
-            redistribute connected
+            neighbor 192.168.2.1 remote-as 65002
+            neighbor 192.168.2.1 activate
             exit 
         exit
     exit 
