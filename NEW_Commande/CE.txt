@@ -1,8 +1,23 @@
 #CE 1
 conf t 
     hostname CE_1 
+
+    ip access-list standard CLIENT_A_ROUTES 
+        permit 10.10.10.0 0.0.0.255
+        permit 192.168.1.0 0.0.0.255
+        exit
+    route-map OSPF_CLIENT_A_BGP_REDIST permit 10
+        match ip address CLIENT_A_ROUTES
+        exit
+
+    router ospf 1
+        router-id 101.0.0.1
+        redistribute bgp 65001 subnets route-map OSPF_CLIENT_A_BGP_REDIST
+        exit
+
     interface GigabitEthernet1/0 
         ip address 10.10.10.2 255.255.255.0 
+        ip ospf 1 area 1
         no shutdown
         exit 
     
@@ -41,8 +56,23 @@ write
 #CE 2
 conf t 
     hostname CE_2 
+
+    ip access-list standard CLIENT_A_ROUTES 
+        permit 10.10.10.0 0.0.0.255
+        permit 192.168.6.0 0.0.0.255
+        exit
+    route-map OSPF_CLIENT_A_BGP_REDIST permit 10
+        match ip address CLIENT_A_ROUTES
+        exit
+
+    router ospf 1
+        router-id 101.0.0.2
+        redistribute bgp 65001 subnets route-map OSPF_CLIENT_A_BGP_REDIST
+        exit
+
     interface GigabitEthernet1/0 
         ip address 10.10.10.3 255.255.255.0 
+        ip ospf 1 area 1
         no shutdown
         exit 
     
