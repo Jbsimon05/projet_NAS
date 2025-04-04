@@ -6,6 +6,7 @@ conf t
         permit 10.10.10.0 0.0.0.255
         permit 192.168.1.0 0.0.0.255 #PE1
         permit 192.168.6.0 0.0.0.255 #PE2
+        permit 20.20.20.0 0.0.0.255
         exit
     route-map OSPF_CLIENT_A_BGP_REDIST permit 10
         match ip address CLIENT_A_ROUTES
@@ -42,7 +43,7 @@ conf t
             neighbor 192.168.1.2 activate
             neighbor 192.168.1.2 send-community both
             neighbor 192.168.1.2 allowas-in 5
-            network 10.10.10.0 mask 255.255.255.0
+            network 20.20.20.0 mask 255.255.255.0
             network 192.168.1.0 mask 255.255.255.0
             network 101.0.0.1 mask 255.255.255.255
             exit
@@ -62,6 +63,7 @@ conf t
         permit 10.10.10.0 0.0.0.255
         permit 192.168.6.0 0.0.0.255 #PE2
         permit 192.168.1.0 0.0.0.255 #PE1
+        permit 20.20.20.0 0.0.0.255
         exit
     route-map OSPF_CLIENT_A_BGP_REDIST permit 10
         match ip address CLIENT_A_ROUTES
@@ -73,7 +75,7 @@ conf t
         exit
 
     interface GigabitEthernet1/0 
-        ip address 10.10.10.3 255.255.255.0 
+        ip address 20.20.20.1 255.255.255.0 
         ip ospf 1 area 1
         no shutdown
         exit 
