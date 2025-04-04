@@ -3,11 +3,12 @@ import math
 
 def insert_line(filename, index_line: int, data: str) -> None:
     """
-    Insère une ligne de données à un index spécifique dans un fichier.
+    Insère une ligne de texte à un index spécifique dans un fichier.
+    
     Args:
         filename (str): Le chemin du fichier où insérer la ligne.
-        index_line (int): L'index de la ligne où insérer les données.
-        data (str): La ligne de données à insérer.
+        index_line (int): L'index de la ligne où insérer les données (commence à 0).
+        data (str): La ligne de texte à insérer.
     """
     with open(filename, 'r') as file:
         lines = file.readlines()
@@ -18,11 +19,13 @@ def insert_line(filename, index_line: int, data: str) -> None:
 def find_index(filename, line: str) -> int:
     """
     Trouve l'index d'une ligne spécifique dans un fichier.
+    
     Args:
         filename (str): Le chemin du fichier à analyser.
         line (str): La ligne à rechercher dans le fichier.
+    
     Returns:
-        int: L'index de la ligne dans le fichier.
+        int: L'index de la ligne dans le fichier (commence à 0).
     """
     with open(filename, 'r') as file:
         lines = file.readlines()
@@ -30,6 +33,15 @@ def find_index(filename, line: str) -> int:
 
 
 def get_subnet(ip_with_suffix: str) -> str:
+    """
+    Calcule le sous-réseau correspondant à une adresse IP avec suffixe CIDR.
+    
+    Args:
+        ip_with_suffix (str): Une adresse IP avec suffixe (exemple : "192.168.2.1/24").
+    
+    Returns:
+        str: L'adresse du sous-réseau au format IPv4.
+    """
     ip_part, suffix = ip_with_suffix.split('/')
     suffix = int(suffix)
     ip_octets = list(map(int, ip_part.split('.')))
@@ -51,8 +63,13 @@ def get_subnet(ip_with_suffix: str) -> str:
 
 def get_mask(bits_to_clear: str) -> str:
     """
-    Returns a custom subnet mask where the rightmost `bits_to_clear` bits are set to 0,
-    and the remaining (leftmost) bits are set to 1.
+    Génère un masque de sous-réseau personnalisé où les `bits_to_clear` bits les plus à droite sont à 0.
+    
+    Args:
+        bits_to_clear (str): Nombre de bits à mettre à 0 (exemple : "192.168.2.1/24" ou "24").
+    
+    Returns:
+        str: Le masque de sous-réseau au format IPv4.
     """
     bits_to_clear = int(bits_to_clear.split('/')[1]) if '/' in bits_to_clear else bits_to_clear
     if not (0 <= bits_to_clear <= 32):
@@ -65,7 +82,13 @@ def get_mask(bits_to_clear: str) -> str:
 
 def get_reversed_mask(bits_to_clear: str) -> str:
     """
-    Returns the bitwise inverse of the result from get_mask.
+    Génère l'inverse bit à bit d'un masque de sous-réseau.
+    
+    Args:
+        bits_to_clear (str): Nombre de bits à mettre à 0 (exemple : "192.168.2.1/24" ou "24").
+    
+    Returns:
+        str: Le masque inversé au format IPv4.
     """
     # Call get_mask and parse the result
     mask_str = get_mask(bits_to_clear)

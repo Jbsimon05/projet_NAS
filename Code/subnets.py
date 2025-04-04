@@ -2,8 +2,15 @@ import json
 import ipaddress
 
 class SubnetsGen:
-
+    """
+    Classe pour générer des sous-réseaux et des interfaces pour un réseau donné à partir d'un fichier intends.json.
+    """
     def __init__(self, intent: dict):
+        """
+        Initialise la classe avec l'intention réseau et génère les sous-réseaux et interfaces nécessaires.
+        Args:
+            intent (dict): Dictionnaire représentant l'intention réseau.
+        """
         self.intent = intent
         self.subnet_dict = {}
         self.subnets = {}
@@ -17,7 +24,7 @@ class SubnetsGen:
         
     def get_loopback_interfaces(self) -> None:
         """
-        Generates a dictionary with loopback interfaces for each router in the network.
+        Génère un dictionnaire contenant les interfaces loopback pour chaque routeur du réseau.
         """
         loopbackref = self.intent["Backbone"]["loopback"]
         # Iterate over each AS
@@ -33,13 +40,11 @@ class SubnetsGen:
         
     def give_subnet_dict(self) -> dict:
         """
-        Creates a dict associating a unique number to every physical link in the network.
-        Args:
-        self.intent (dict): The network self.intent.
+        Crée un dictionnaire associant un numéro unique à chaque lien physique du réseau.
         Returns:
-        dict: A dictionary with unique numbers for each physical link.
-        Example:
-        {'AS_1': {('R1', 'R2'): 1, ('R1', 'R3'): 2, ... }}
+            dict: Un dictionnaire avec des numéros uniques pour chaque lien physique.
+        ex:
+            {'AS_1': {('R1', 'R2'): 1, ('R1', 'R3'): 2, ... }}
         """
         self.subnet_dict = {}
         # Iterate over each AS
@@ -57,11 +62,9 @@ class SubnetsGen:
 
     def last_entries_subnet(self) -> None:
         """
-        Find and return the last subnet value used.
-        Args:
-        subnet_dict (dict): The subnet dictionary.
+        Trouve et retourne la dernière valeur de sous-réseau utilisée.
         Returns:
-        int: The last subnet value used.
+            int: La dernière valeur de sous-réseau utilisée.
         """
         last_entry = dict()
         for AS in self.subnet_dict:
@@ -70,28 +73,25 @@ class SubnetsGen:
 
     def get_subnet_interconnexion(self, AS: str, routeur1: str, routeur2: str) -> str:
         """
-        Retrieve the IPv6 address of an interconnection subnet between two given routers.
+        Récupère l'adresse IPv6 d'un sous-réseau d'interconnexion entre deux routeurs donnés.
         Args:
-            AS (str): The AS identifier.
-            subnet_interconnexion_dict (dict): The interconnection subnet dictionary.
-            routeur1 (str): The first router identifier.
-            routeur2 (str): The second router identifier.
+            AS (str): L'identifiant de l'AS.
+            routeur1 (str): L'identifiant du premier routeur.
+            routeur2 (str): L'identifiant du second routeur.
         Returns:
-            str: The IPv6 address of the interconnection subnet.
+            str: L'adresse IPv6 du sous-réseau d'interconnexion.
         """
         return self.subnet_interconnexion_dict[AS][(routeur1, routeur2)] or self.subnet_interconnexion_dict[AS][(routeur2, routeur1)]
 
     def generate_addresses_dict(self) -> None:
         """
-        Generates a dictionary with neighbors, interfaces, IP addresses, and AS for each router.
-        Args:
-            self.intent (dict): The network self.intent.
+        Génère un dictionnaire contenant les voisins, interfaces, adresses IP et AS pour chaque routeur.
         Returns:
-            dict: A dictionary with neighbors, interfaces, IP addresses, and AS for each router.
-        Output format:
+            dict: Un dictionnaire avec les informations réseau pour chaque routeur.
+        Format de sortie:
             {
-                "R1": [{"R2": ["GigabitEthernet1/0", "2001::1", "AS_1"]}, {"R3": ["interface", "ipv6 address", "AS"]}, ...],
-                "R2": [{"R1": ["interface", "ipv6 address", "AS"]}, {"R4": ["interface", "ipv6 address", "AS"]}, ...],
+                "R1": [{"R2": ["GigabitEthernet1/0", "2001::1", "AS_1"]}, {"R3": ["interface", "adresse ipv6", "AS"]}, ...],
+                "R2": [{"R1": ["interface", "adresse ipv6", "AS"]}, {"R4": ["interface", "adresse ipv6", "AS"]}, ...],
                 ...
             }
         """
@@ -124,22 +124,22 @@ class SubnetsGen:
                         self.subnets[router][interface] = self.loopback_interfaces[router]
     def save_to_json(self, filename: str = "subnets.json") -> None:
         """
-        Save the subnets configuration to a JSON file.
+        Sauvegarde la configuration des sous-réseaux dans un fichier JSON.
         Args:
-            filename (str): The name of the JSON file. Defaults to 'subnets.json'.
+            filename (str): Le nom du fichier JSON. Par défaut 'subnets.json'.
         """
         with open(filename, "w") as json_file:
             json.dump(self.subnets, json_file, indent=4)
 
 def get_intent(filename: str) -> dict:
     """
-    Load the intent from a JSON file.
+    Charge l'intention réseau à partir d'un fichier JSON.
     Args:
-        filename (str): The path to the JSON file.
+        filename (str): Le chemin vers le fichier JSON.
     Returns:
-        dict: The intent dictionary loaded from the file.
-    Raises:
-        FileNotFoundError: If the file does not exist.
+        dict: Le dictionnaire d'intention chargé depuis le fichier.
+    Lève:
+        FileNotFoundError: Si le fichier n'existe pas.
     """
     try:
         with open(filename, "r") as file:
@@ -147,19 +147,23 @@ def get_intent(filename: str) -> dict:
     except FileNotFoundError:
         raise FileNotFoundError(f"The file '{filename}' was not found. Please ensure the file exists in the correct path.")
 
-intent_file = get_intent("intends.json")
-sub = SubnetsGen(intent_file)
+def main():
+    # Load the intent from intends.json
+    intent_file = "intends.json"
+    intent = get_intent(intent_file)
 
-# Exemple de sortie JSON
-"""
-{
-    "PE1": {
-        "Loopback0": "192.168.1.4/32",
-        "FastEthernet0/0": {
-            "neighbor": "P1",
-            "IP": "192.168.1.4/8",
-            "Area": "Backbone"
-        }
-    }
-"}
-"""
+    # Generate subnets.json using SubnetsGen
+    subnets_gen = SubnetsGen(intent)
+    subnets = subnets_gen.subnets  # Dictionary with subnets information
+
+    # Save the configuration to a .json file
+    config_filename = "subnets.json"
+    with open(config_filename, "w") as config_file:
+        json.dump(subnets, config_file, indent=4)
+    
+    #old test
+    # intent_file = get_intent("intends.json")
+    # sub = SubnetsGen(intent_file)
+
+if __name__ == "__main__":
+    main()
