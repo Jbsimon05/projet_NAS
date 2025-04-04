@@ -6,26 +6,27 @@
         "routers": {
             "PE1": {
                 "P1": "FastEthernet0/0",
-                "Red1": "GigabitEthernet1/0",
-                "Green1": "GigabitEthernet2/0",
-                "Blue1": "GigabitEthernet3/0"
+                "CE-R1": "GigabitEthernet1/0",
+                "CE-G1": "GigabitEthernet2/0",
+                "CE-B1": "GigabitEthernet3/0"
             },
             "P1": {
                 "PE1": "FastEthernet0/0",
                 "P2": "GigabitEthernet1/0",
-                "P3": "GigabitEthernet2/0"
+                "P4": "GigabitEthernet2/0"
             },
             "P2": {
                 "P1": "GigabitEthernet1/0",
-                "P4": "GigabitEthernet2/0"
+                "P3": "GigabitEthernet2/0"
             },
             "P3": {
-                "P1": "GigabitEthernet2/0",
+                "PE2": "FastEthernet0/0",
+                "P2": "GigabitEthernet2/0",
                 "P4": "GigabitEthernet1/0"
             },
             "P4": {
-                "PE2": "FastEthernet0/0",
-                "P2": "GigabitEthernet2/0",
+                "PE3": "FastEthernet0/0",
+                "P1": "GigabitEthernet2/0",
                 "P3": "GigabitEthernet1/0"
             }, 
             "PE2" : {
