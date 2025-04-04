@@ -42,9 +42,9 @@ class Router:
         - Ajoute des paramètres spécifiques comme OSPF, MPLS ou duplex.
         """
         
-        self.file += f"interface loopback0\n"
-        self.loopback = self.subnets[self.router_name]["loopback"]
-        self.file += f" ip address {self.loopback} {get_subnet(self.loopback)}\n"
+        self.loopback = f"interface loopback0\n"
+        self.loopback += self.subnets[self.router_name]["loopback"]
+        self.loopback += f" ip address {self.loopback} {get_subnet(self.loopback)}\n"
 
         self.interfaces = ["" for i in range(4)]
         i = 0
