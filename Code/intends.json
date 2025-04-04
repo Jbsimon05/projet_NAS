@@ -30,36 +30,72 @@
                 "P3": "GigabitEthernet1/0"
             }, 
             "PE2" : {
+                "P3": "FastEthernet0/0",
+                "CE-R2": "GigabitEthernet1/0",
+                "CE-G2": "GigabitEthernet2/0",
+                "CE-B2": "GigabitEthernet3/0"
+            }, 
+            "PE3" : {
                 "P4": "FastEthernet0/0",
-                "Red2": "GigabitEthernet1/0",
-                "Green2": "GigabitEthernet2/0",
-                "Blue2": "GigabitEthernet3/0"
+                "CE-R3": "GigabitEthernet1/0",
+                "CE-G3": "GigabitEthernet2/0",
+                "CE-B3": "GigabitEthernet3/0"
             }
         },
         "protocol": "OSPF"
     },
     "Red": {
-        "address": "192.16.1.0",
-        "subnet_mask": "/8",
-        "routers": {
-            "Red1": {
-                "PE1": "GigabitEthernet1/0"
-            },
-            "Red2": {
-                "PE2": "GigabitEthernet1/0"
-            }
-        },
-        "protocol": "BGP"
-    },
-    "Green": {
         "address": "192.16.2.0",
         "subnet_mask": "/8",
         "routers": {
-            "Green1": {
-                "PE1": "GigabitEthernet2/0"
+            "CE-R1": {
+                "PE1": "GigabitEthernet1/0",
+                "C-R1": "FastEthernet0/0"
             },
-            "Green2": {
-                "PE2": "GigabitEthernet2/0"
+            "CE-R2": {
+                "PE2": "GigabitEthernet1/0",
+                "C-R2": "FastEthernet0/0"
+            }, 
+            "CE-R3": {
+                "PE3": "GigabitEthernet1/0",
+                "C-R3": "FastEthernet0/0"
+            },
+            "C-R1": {
+                "CE-R1": "FastEthernet0/0"
+            }, 
+            "C-R2": {
+                "CE-R2": "FastEthernet0/0"
+            }, 
+            "C-R3": {
+                "CE-R3": "FastEthernet0/0"
+            }
+        },
+        "protocol": "BGP"
+    }, 
+    "Green": {
+        "address": "192.16.3.0",
+        "subnet_mask": "/8",
+        "routers": {
+            "CE-G1": {
+                "PE1": "GigabitEthernet1/0",
+                "C-G1": "FastEthernet0/0"
+            },
+            "CE-G2": {
+                "PE2": "GigabitEthernet1/0",
+                "C-G2": "FastEthernet0/0"
+            }, 
+            "CE-G3": {
+                "PE3": "GigabitEthernet1/0",
+                "C-G3": "FastEthernet0/0"
+            },
+            "C-G1": {
+                "CE-G1": "FastEthernet0/0"
+            }, 
+            "C-G2": {
+                "CE-G2": "FastEthernet0/0"
+            }, 
+            "C-G3": {
+                "CE-G3": "FastEthernet0/0"
             }
         },
         "protocol": "BGP"
@@ -68,14 +104,28 @@
         "address": "192.16.3.0",
         "subnet_mask": "/8",
         "routers": {
-            "Blue1": {
-                "PE1": "GigabitEthernet3/0"
+            "CE-B1": {
+                "PE1": "GigabitEthernet1/0",
+                "C-B1": "FastEthernet0/0"
             },
-            "Blue2": {
-                "PE2": "GigabitEthernet3/0"
+            "CE-B2": {
+                "PE2": "GigabitEthernet1/0",
+                "C-B2": "FastEthernet0/0"
+            }, 
+            "CE-B3": {
+                "PE3": "GigabitEthernet1/0",
+                "C-B3": "FastEthernet0/0"
+            },
+            "C-B1": {
+                "CE-B1": "FastEthernet0/0"
+            }, 
+            "C-B2": {
+                "CE-B2": "FastEthernet0/0"
+            }, 
+            "C-B3": {
+                "CE-B3": "FastEthernet0/0"
             }
         },
         "protocol": "BGP"
     }
-    
 }
