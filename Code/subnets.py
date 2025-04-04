@@ -121,7 +121,6 @@ class SubnetsGen:
                         }
                     else:
                         self.subnets[router][interface] = self.loopback_interfaces[router]
-
     def save_to_json(self, filename: str = "subnets.json") -> None:
         """
         Save the subnets configuration to a JSON file.
@@ -150,10 +149,8 @@ def get_intent(filename: str) -> dict:
 intent_file = get_intent("intends.json")
 sub = SubnetsGen(intent_file)
 
-
+# Exemple de sortie JSON
 """
-
-
 {
     "PE1": {
         "Loopback0": "192.168.1.4/32",

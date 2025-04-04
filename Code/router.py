@@ -36,23 +36,35 @@ class Router:
 
     def generate_igp(self):
         self.file += "router ospf 1\n"
-
         for interface in self.subnets[self.router_name].keys():
             if interface != "loopback":
                 self.file += " network {} {} area 0\n".format(
                     get_subnet(self.subnets[self.router_name][interface]["ip"]),
                     get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
                 )
+    def generate_bgp(self):
+        """
+        Génère la configuration BGP pour le routeur.
+        """
+        self.file += "router bgp 10\n"
+        self.file += f" bgp router-id {self.router_name}\n"
+        self.file += " bgp log-neighbor-changes\n"
+        self.file += " no bgp default ipv4-unicast\n"
+
+        for interface, specs in self.subnets[self.router_name].items():
+            if interface != "loopback":
+                neighbor_ip = get_subnet(specs["ip"])
+                neighbor_as = specs["AS"]
+                self.file += f" neighbor {neighbor_ip} remote-as {neighbor_as}\n"
+                self.file += f" neighbor {neighbor_ip} update-source Loopback0\n"
 
     def generate_finale_config(self):
         self.file += FINAL_CONFIG
 
     def generate_routing_file(self):
         self.generate_init_config()
-
         self.generate_interfaces()
         self.generate_igp()
-
+        self.generate_bgp()
         self.generate_finale_config()
-        
         return self.file
