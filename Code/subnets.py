@@ -6,11 +6,13 @@ class SubnetsGen:
     def __init__(self, intent: dict):
         self.intent = intent
         self.subnet_dict = {}
-        self.router_neighbors = {}
+        self.subnets = {}
         self.loopback_interfaces = {}
         
         self.get_loopback_interfaces()
         self.generate_addresses_dict()
+        
+        # peut être mis en commentaire 
         self.save_to_json()
         
     def get_loopback_interfaces(self) -> None:
@@ -99,8 +101,8 @@ class SubnetsGen:
         for AS in self.intent:
             # Iterate over each router in the current AS
             for router in self.intent[AS]['routers']:
-                if router not in self.router_neighbors:
-                    self.router_neighbors[router] = {}
+                if router not in self.subnets:
+                    self.subnets[router] = {}
                 # Iterate over each neighbor of the current router
                 for neighbor, interface in {**self.intent[AS]['routers'][router], "abc": "loopback"}.items():
                     if neighbor != "abc":
@@ -112,22 +114,22 @@ class SubnetsGen:
                             subnet_index = self.subnet_dict[AS][(neighbor, router)]
                             router_index = 2
                         ipv6_address = f"{self.intent[AS]['address'][:-1]}{subnet_index}{self.intent[AS]['subnet_mask']}"
-                        self.router_neighbors[router][interface] = {
+                        self.subnets[router][interface] = {
                             "neighbor": neighbor, 
                             "ip" : ipv6_address, 
                             "AS": AS,
                         }
                     else:
-                        self.router_neighbors[router][interface] = self.loopback_interfaces[router]
+                        self.subnets[router][interface] = self.loopback_interfaces[router]
 
     def save_to_json(self, filename: str = "subnets.json") -> None:
         """
-        Save the router_neighbors configuration to a JSON file.
+        Save the subnets configuration to a JSON file.
         Args:
             filename (str): The name of the JSON file. Defaults to 'subnets.json'.
         """
         with open(filename, "w") as json_file:
-            json.dump(self.router_neighbors, json_file, indent=4)
+            json.dump(self.subnets, json_file, indent=4)
 
 def get_intent(filename: str) -> dict:
     """
