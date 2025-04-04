@@ -1,6 +1,6 @@
 # Design Document - Projet NAS
 
-![GNS3 Main Screen](images/GNS3_main_screen.png)
+![GNS3 Main Screen](images/GNS3_main_screen_v3.png)
 
 ## Overview
 
