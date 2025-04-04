@@ -20,27 +20,20 @@ class Router:
         """
         Génère la configuration des interfaces pour le routeur.
         """
+        
+        self.file += f"interface loopback0\n"
+        self.loopback = self.subnets[self.router_name]["loopback"]
+        self.file += f" ip address {self.loopback} {get_subnet(self.loopback)}\n"
+
+        self.interfaces = ["" for i in range(4)]
+        i = 0
         for interface, specs in self.subnets[self.router_name].items():
-            self.file += f"interface {interface}\n"
-            if interface == "loopback":
-                ip = get_subnet(specs)
-                mask = get_mask(specs)
-                self.file += f" ip address {ip} {mask}\n"
-                if self.router_name[0] == "P":
-                    self.file += " ip ospf 1 area 0\n"
-            else:
-                ip = get_subnet(specs["ip"])
-                mask = get_mask(specs["ip"])
-                self.file += f" ip address {ip} {mask}\n"
-                if interface == "FastEthernet0/0" : self.file += "duplex full\n"
-                if specs["linkType"] == "OSPF" : 
-                    self.file += " ip ospf 1 area 0\n"
-                    self.file += " mpls ip\n"
-                self.file += "negociate auto\n"
-                if specs["linkType"] == "IBGP":
-                    ...
-                    #self.file += f" ip vrf forwarding {}\n"
-            self.file += "!\n"
+            if interface != "loopback":
+                self.interfaces[i] += f"interface {interface}\n"
+                self.interfaces[i] += f" ip address {get_subnet(specs["ip"])} {get_mask(specs["ip"])}\n"
+                if interface == "FastEthernet0/0" : self.interfaces[i] += "duplex full\n"
+                self.interfaces[i] += "negociate auto\n"
+            i += 1
 
     def generate_igp(self):
         self.file += "router ospf 1\n"
