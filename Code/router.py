@@ -26,11 +26,14 @@ class Router:
                 ip = get_subnet(specs)
                 mask = get_mask(specs)
                 self.file += f" ip address {ip} {mask}\n"
+                if self.router_name[0] == "P":
+                    self.file += " ip ospf 1 area 0\n"
             else:
                 ip = get_subnet(specs["ip"])
                 mask = get_mask(specs["ip"])
                 self.file += f" ip address {ip} {mask}\n"
-                self.file += f" duplex full\n"
+                if interface == "FastEthernet0/0" : self.file += "duplex full\n"
+                if self.specs["linkType"] == "OSPF" : self.file += " ip ospf 1 area 0\n"
                 self.file += " mpls ip\n"
             self.file += "!\n"
 

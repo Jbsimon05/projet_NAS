@@ -118,6 +118,7 @@ class SubnetsGen:
                             "neighbor": neighbor, 
                             "ip" : ipv6_address, 
                             "AS": AS,
+                            "linkType": "OSPF" if router[0] == "P" == neighbor[0] else "IBGP"
                         }
                     else:
                         self.subnets[router][interface] = self.loopback_interfaces[router]
