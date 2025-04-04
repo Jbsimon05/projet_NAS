@@ -10,10 +10,7 @@ def main():
 
     # Generate subnets.json using SubnetsGen
     subnets_gen = SubnetsGen(intent)
-    subnets = subnets_gen.router_neighbors  # Dictionary with subnets information
-
-    # Save subnets.json
-    subnets_gen.save_to_json()
+    subnets = subnets_gen.subnets  # Dictionary with subnets information
 
     # Generate configuration files for each router
     for router_name in subnets:

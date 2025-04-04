@@ -40,8 +40,8 @@ class Router:
 
         for neighbor in self.subnets[self.router_name]:
             self.file += " network {} {} area 0\n".format(
-                get_subnet(self.subnets[self.router_name][neighbor.keys()][1]),
-                get_reversed_mask(self.subnets[self.router_name][neighbor.keys()][1])
+                get_subnet(self.subnets[self.router_name][neighbor.values()]["neighbor"]),
+                get_reversed_mask(self.subnets[self.router_name][neighbor.values()]["neighbor"])
             )
 
     def generate_finale_config(self):
