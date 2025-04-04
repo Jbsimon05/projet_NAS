@@ -4,7 +4,8 @@ conf t
 
     ip access-list standard CLIENT_A_ROUTES 
         permit 10.10.10.0 0.0.0.255
-        permit 192.168.1.0 0.0.0.255
+        permit 192.168.1.0 0.0.0.255 #PE1
+        permit 192.168.6.0 0.0.0.255 #PE2
         exit
     route-map OSPF_CLIENT_A_BGP_REDIST permit 10
         match ip address CLIENT_A_ROUTES
@@ -59,7 +60,8 @@ conf t
 
     ip access-list standard CLIENT_A_ROUTES 
         permit 10.10.10.0 0.0.0.255
-        permit 192.168.6.0 0.0.0.255
+        permit 192.168.6.0 0.0.0.255 #PE2
+        permit 192.168.1.0 0.0.0.255 #PE1
         exit
     route-map OSPF_CLIENT_A_BGP_REDIST permit 10
         match ip address CLIENT_A_ROUTES

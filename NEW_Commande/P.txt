@@ -1,0 +1,66 @@
+#P1 
+conf t 
+    hostname P1 
+
+    router ospf 1 
+        router-id 103.0.0.1
+        exit
+    
+    interface Loopback0 
+        ip address 103.0.0.1 255.255.255.255
+        ip ospf 1 area 0
+        mpls ip 
+        no shutdown 
+        exit 
+
+    interface GigabitEthernet1/0 
+        ip address 192.168.3.2 255.255.255.0
+        ip ospf 1 area 0
+        mpls ip 
+        no shutdown 
+        exit 
+    
+    interface GigabitEthernet2/0 
+        ip address 192.168.4.1 255.255.255.0
+        ip ospf 1 area 0
+        mpls ip 
+        no shutdown 
+        exit 
+    exit 
+write
+
+
+
+
+
+#P2 
+conf t 
+    hostname P2 
+
+    router ospf 1 
+        router-id 103.0.0.2
+        exit
+    
+    interface Loopback0 
+        ip address 103.0.0.2 255.255.255.255
+        ip ospf 1 area 0
+        mpls ip 
+        no shutdown 
+        exit 
+
+    interface GigabitEthernet1/0 
+        ip address 192.168.5.1 255.255.255.0
+        ip ospf 1 area 0
+        mpls ip 
+        no shutdown 
+        exit 
+    
+    interface GigabitEthernet2/0 
+        ip address 192.168.4.2 255.255.255.0
+        ip ospf 1 area 0
+        mpls ip 
+        no shutdown 
+        exit 
+    exit 
+write
+    
