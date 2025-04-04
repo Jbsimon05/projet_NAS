@@ -70,7 +70,7 @@
                 "CE-R3": "FastEthernet0/0"
             }
         },
-        "protocol": "BGP"
+        "protocol": "OSPF"
     }, 
     "Green": {
         "address": "192.16.3.0",
@@ -98,7 +98,7 @@
                 "CE-G3": "FastEthernet0/0"
             }
         },
-        "protocol": "BGP"
+        "protocol": "OSPF"
     },
     "Blue": {
         "address": "192.16.3.0",
@@ -126,6 +126,6 @@
                 "CE-B3": "FastEthernet0/0"
             }
         },
-        "protocol": "BGP"
+        "protocol": "OSPF"
     }
 }
