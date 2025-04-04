@@ -19,7 +19,7 @@ def main():
 
         # Save the configuration to a .cfg file
         config_filename = f"{router_name}.cfg"
-        with open(config_filename, "w") as config_file:
+        with open("../testConfigFiles/" + config_filename, "w") as config_file:
             config_file.write(config)
 
 if __name__ == "__main__":
