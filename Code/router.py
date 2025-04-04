@@ -46,14 +46,13 @@ class Router:
         self.loopback += self.subnets[self.router_name]["loopback"]
         self.loopback += f" ip address {self.loopback} {get_subnet(self.loopback)}\n"
 
-        self.interfaces = ["" for i in range(4)]
-        i = 0
+        self.interfaces = {}
         for interface, specs in self.subnets[self.router_name].items():
             if interface != "loopback":
-                self.interfaces[i] += f"interface {interface}\n"
-                self.interfaces[i] += f" ip address {get_subnet(specs["ip"])} {get_mask(specs["ip"])}\n"
+                self.interfaces[interface] += f"interface {interface}\n"
+                self.interfaces[interface] += f" ip address {get_subnet(specs["ip"])} {get_mask(specs["ip"])}\n"
                 if interface == "FastEthernet0/0" : self.interfaces[i] += "duplex full\n"
-                self.interfaces[i] += "negociate auto\n"
+                self.interfaces[interface] += "negociate auto\n"
             i += 1
 
     def generate_igp(self):
@@ -63,13 +62,21 @@ class Router:
         Cette méthode configure OSPF pour les interfaces du routeur, en définissant
         les réseaux et les masques inversés associés.
         """
+        self.max_path = 4
         self.file += "router ospf 1\n"
+
         for interface in self.subnets[self.router_name].keys():
-            if interface != "loopback":
+            if interface == "loopback":
+                self.file += " network {} {} area 0\n".format(
+                    get_subnet(self.subnets[self.router_name]["loopback"]),
+                    get_reversed_mask(self.subnets[self.router_name]["loopback"])
+                )
+            else: 
                 self.file += " network {} {} area 0\n".format(
                     get_subnet(self.subnets[self.router_name][interface]["ip"]),
                     get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
                 )
+        self.file += f" maximum-paths {self.max_path}\n"
 
     def generate_bgp(self):
         """
