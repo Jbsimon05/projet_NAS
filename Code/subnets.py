@@ -28,7 +28,7 @@ class SubnetsGen:
             for router in self.intent[AS]['routers'].keys():
                 count += 1
                 ip = ipaddress.ip_network(loopbackref).network_address + count
-                self.loopback_interfaces[router] = f"{ip}/24"
+                self.loopback_interfaces[router] = f"{ip}/32"
 
         
     def give_subnet_dict(self) -> dict:

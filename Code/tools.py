@@ -1,4 +1,5 @@
 import ipaddress
+import math
 
 def insert_line(filename, index_line: int, data: str) -> None:
     """
@@ -27,26 +28,55 @@ def find_index(filename, line: str) -> int:
         lines = file.readlines()
     return lines.index(line)
 
-get_subnet = lambda ip_with_cidr: str(ipaddress.ip_network(ip_with_cidr, strict=False).network_address)
-"""
-Renvoie l'adresse réseau (subnet) pour une adresse IP avec notation CIDR.
-Args:
-    ip_with_cidr (str): L'adresse IP avec notation CIDR (ex. "192.168.2.1/24").
-Returns:
-    str: L'adresse réseau correspondante (ex. "192.168.2.0").
-"""
 
-def get_reversed_mask(ip_with_cidr: str) -> str:
+def get_subnet(ip_with_suffix: str) -> str:
+    ip_part, suffix = ip_with_suffix.split('/')
+    suffix = int(suffix)
+    ip_octets = list(map(int, ip_part.split('.')))
+
+    # Convertir l'adresse IP en entier 32 bits
+    ip_int = (ip_octets[0] << 24) | (ip_octets[1] << 16) | (ip_octets[2] << 8) | ip_octets[3]
+
+    # Calcul du nombre de bits à mettre à 0 (log2 de la valeur du suffixe)
+    zero_bits = int(math.log2(suffix))
+    mask = ~((1 << zero_bits) - 1) & 0xFFFFFFFF
+
+    # Appliquer le masque
+    subnet_int = ip_int & mask
+
+    # Reconvertir en format IPv4
+    subnet_ip = '.'.join(str((subnet_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+    return subnet_ip
+
+
+def get_mask(bits_to_clear: str) -> str:
     """
-    Renvoie le masque de sous-réseau inversé pour une adresse IP avec notation CIDR.
-    Args:
-        ip_with_cidr (str): L'adresse IP avec notation CIDR (ex. "192.168.2.1/30").
-    Returns:
-        str: Le masque de sous-réseau inversé (ex. "0.0.0.4").
+    Returns a custom subnet mask where the rightmost `bits_to_clear` bits are set to 0,
+    and the remaining (leftmost) bits are set to 1.
     """
-    network = ipaddress.ip_network(ip_with_cidr, strict=False)
-    reversed_mask = ~int(network.netmask) & 0xFFFFFFFF
-    return str(ipaddress.IPv4Address(reversed_mask))
+    bits_to_clear = int(bits_to_clear.split('/')[1]) if '/' in bits_to_clear else bits_to_clear
+    if not (0 <= bits_to_clear <= 32):
+        raise ValueError("bits_to_clear must be between 0 and 32")
+    
+    one_bits = 32 - bits_to_clear
+    mask = (0xFFFFFFFF >> (32 - one_bits)) << (32 - one_bits)
+    
+    return '.'.join(str((mask >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+
+def get_reversed_mask(bits_to_clear: str) -> str:
+    """
+    Returns the bitwise inverse of the result from get_mask.
+    """
+    # Call get_mask and parse the result
+    mask_str = get_mask(bits_to_clear)
+    mask_parts = [int(part) for part in mask_str.split('.')]
+    
+    # Convert to 32-bit integer
+    mask_int = sum(part << (8 * (3 - i)) for i, part in enumerate(mask_parts))
+    
+    # Invert and convert back to dotted decimal
+    reversed_int = ~mask_int & 0xFFFFFFFF
+    return '.'.join(str((reversed_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
 
 ##############################################################################
 

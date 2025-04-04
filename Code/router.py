@@ -1,5 +1,5 @@
 from template import *
-from tools import insert_line, find_index, get_subnet, get_reversed_mask
+from tools import insert_line, find_index, get_mask, get_subnet, get_reversed_mask
 
 class Router:
 
@@ -21,28 +21,28 @@ class Router:
         Génère la configuration des interfaces pour le routeur.
         """
         for interface, specs in self.subnets[self.router_name].items():
+            self.file += f"interface {interface}\n"
             if interface == "loopback":
                 ip = get_subnet(specs)
-                mask = get_reversed_mask(specs)
+                mask = get_mask(specs)
+                self.file += f" ip address {ip} {mask}\n"
             else:
                 ip = get_subnet(specs["ip"])
-                mask = get_reversed_mask(specs["ip"])
-            self.file += f"interface {interface}\n"
-            self.file += f" ip address {ip} {mask}\n"
-            if "duplex" in specs:
-                self.file += f" duplex {specs['duplex']}\n"
-            if "mpls" in specs and specs["mpls"]:
+                mask = get_mask(specs["ip"])
+                self.file += f" ip address {ip} {mask}\n"
+                self.file += f" duplex full\n"
                 self.file += " mpls ip\n"
             self.file += "!\n"
 
     def generate_igp(self):
         self.file += "router ospf 1\n"
 
-        for neighbor in self.subnets[self.router_name]:
-            self.file += " network {} {} area 0\n".format(
-                get_subnet(self.subnets[self.router_name][neighbor.values()]["neighbor"]),
-                get_reversed_mask(self.subnets[self.router_name][neighbor.values()]["neighbor"])
-            )
+        for interface, neighbor in self.subnets[self.router_name].items():
+            if interface != "loopback":
+                self.file += " network {} {} area 0\n".format(
+                    get_subnet(self.subnets[self.router_name][interface]["ip"]),
+                    get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
+                )
 
     def generate_finale_config(self):
         self.file += FINAL_CONFIG
