@@ -3,22 +3,26 @@
         "FastEthernet0/0": {
             "neighbor": "P1",
             "ip": "192.168.1.4/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet1/0": {
             "neighbor": "Red1",
             "ip": "192.168.1.1/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "IBGP"
         },
         "GigabitEthernet2/0": {
             "neighbor": "Green1",
             "ip": "192.168.1.2/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "IBGP"
         },
         "GigabitEthernet3/0": {
             "neighbor": "Blue1",
             "ip": "192.168.1.3/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.1/32"
     },
@@ -26,17 +30,20 @@
         "FastEthernet0/0": {
             "neighbor": "PE1",
             "ip": "192.168.1.4/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet1/0": {
             "neighbor": "P2",
             "ip": "192.168.1.5/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet2/0": {
             "neighbor": "P3",
             "ip": "192.168.1.6/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "loopback": "192.168.100.2/32"
     },
@@ -44,12 +51,14 @@
         "GigabitEthernet1/0": {
             "neighbor": "P1",
             "ip": "192.168.1.5/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet2/0": {
             "neighbor": "P4",
             "ip": "192.168.1.7/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "loopback": "192.168.100.3/32"
     },
@@ -57,12 +66,14 @@
         "GigabitEthernet2/0": {
             "neighbor": "P1",
             "ip": "192.168.1.6/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet1/0": {
             "neighbor": "P4",
             "ip": "192.168.1.8/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "loopback": "192.168.100.4/32"
     },
@@ -70,17 +81,20 @@
         "FastEthernet0/0": {
             "neighbor": "PE2",
             "ip": "192.168.1.9/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet2/0": {
             "neighbor": "P2",
             "ip": "192.168.1.7/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet1/0": {
             "neighbor": "P3",
             "ip": "192.168.1.8/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "loopback": "192.168.100.5/32"
     },
@@ -88,22 +102,26 @@
         "FastEthernet0/0": {
             "neighbor": "P4",
             "ip": "192.168.1.9/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "OSPF"
         },
         "GigabitEthernet1/0": {
             "neighbor": "Red2",
             "ip": "192.168.1.10/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "IBGP"
         },
         "GigabitEthernet2/0": {
             "neighbor": "Green2",
             "ip": "192.168.1.11/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "IBGP"
         },
         "GigabitEthernet3/0": {
             "neighbor": "Blue2",
             "ip": "192.168.1.12/8",
-            "AS": "Backbone"
+            "AS": "Backbone",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.6/32"
     },
@@ -111,7 +129,8 @@
         "GigabitEthernet1/0": {
             "neighbor": "PE1",
             "ip": "192.16.1.12/8",
-            "AS": "Red"
+            "AS": "Red",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.7/32"
     },
@@ -119,7 +138,8 @@
         "GigabitEthernet1/0": {
             "neighbor": "PE2",
             "ip": "192.16.1.12/8",
-            "AS": "Red"
+            "AS": "Red",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.8/32"
     },
@@ -127,7 +147,8 @@
         "GigabitEthernet2/0": {
             "neighbor": "PE1",
             "ip": "192.16.2.12/8",
-            "AS": "Green"
+            "AS": "Green",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.9/32"
     },
@@ -135,7 +156,8 @@
         "GigabitEthernet2/0": {
             "neighbor": "PE2",
             "ip": "192.16.2.12/8",
-            "AS": "Green"
+            "AS": "Green",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.10/32"
     },
@@ -143,7 +165,8 @@
         "GigabitEthernet3/0": {
             "neighbor": "PE1",
             "ip": "192.16.3.12/8",
-            "AS": "Blue"
+            "AS": "Blue",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.11/32"
     },
@@ -151,7 +174,8 @@
         "GigabitEthernet3/0": {
             "neighbor": "PE2",
             "ip": "192.16.3.12/8",
-            "AS": "Blue"
+            "AS": "Blue",
+            "linkType": "IBGP"
         },
         "loopback": "192.168.100.12/32"
     }
