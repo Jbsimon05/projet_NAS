@@ -6,6 +6,11 @@ class CE(Router):
     """
     Customer Edge (CE) router.
     """
-    def generate_bgp(self):
+    def __init__(self, router_name, intent, subnets):
+        super().__init__(router_name, intent, subnets)
 
-"""a changer"""
+    def generate_interfaces(self):
+        super().generate_interfaces()
+        self.file += self.loopback
+        for interface in self.interfaces:
+            self.file += "!\n" + interface + "!\n"

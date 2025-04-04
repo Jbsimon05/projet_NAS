@@ -33,7 +33,7 @@ class Router:
                 mask = get_mask(specs["ip"])
                 self.file += f" ip address {ip} {mask}\n"
                 if interface == "FastEthernet0/0" : self.file += "duplex full\n"
-                if self.specs["linkType"] == "OSPF" : 
+                if specs["linkType"] == "OSPF" : 
                     self.file += " ip ospf 1 area 0\n"
                     self.file += " mpls ip\n"
                 self.file += "negociate auto\n"
