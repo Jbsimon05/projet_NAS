@@ -55,12 +55,11 @@ class Router:
                 self.interfaces[interface] += "negociate auto\n"
             i += 1
 
-    def generate_igp(self):
+    def generate_ospf(self):
         """
         Génère la configuration du protocole de routage IGP (OSPF).
 
-        Cette méthode configure OSPF pour les interfaces du routeur, en définissant
-        les réseaux et les masques inversés associés.
+        Cette méthode est à utiliser pour les sous-classes : P et PE
         """
         self.max_path = 4
         self.file += "router ospf 1\n"
@@ -76,8 +75,11 @@ class Router:
                     get_subnet(self.subnets[self.router_name][interface]["ip"]),
                     get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
                 )
-        self.file += f" maximum-paths {self.max_path}\n"
+        ### @todo: faut rajouter ça ou pas ?
+        # self.file += f" maximum-paths {self.max_path}\n"
 
+
+    ### @todo: il faut supprimer cette méthode car uniquement sur PE 
     def generate_bgp(self):
         """
         Génère la configuration du protocole de routage BGP.
