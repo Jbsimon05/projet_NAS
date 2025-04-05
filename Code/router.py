@@ -79,7 +79,7 @@ class Router:
         # self.file += f" maximum-paths {self.max_path}\n"
 
 
-    ### @todo: il faut supprimer cette méthode car uniquement sur PE 
+    ### TODO il faut supprimer cette méthode car uniquement sur PE 
     def generate_bgp(self):
         """
         Génère la configuration du protocole de routage BGP.
@@ -112,6 +112,7 @@ class Router:
         """
         self.file += FINAL_CONFIG
 
+    ### TODO : a supprimer à terme 
     def generate_routing_file(self):
         """
         Génère le fichier de configuration complet pour le routeur.
@@ -124,7 +125,6 @@ class Router:
         """
         self.generate_init_config()
         self.generate_interfaces()
-        self.generate_igp()
         self.generate_bgp()
         self.generate_finale_config()
         return self.file

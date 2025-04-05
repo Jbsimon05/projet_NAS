@@ -101,6 +101,23 @@ def get_reversed_mask(bits_to_clear: str) -> str:
     reversed_int = ~mask_int & 0xFFFFFFFF
     return '.'.join(str((reversed_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
 
+def get_router_name(config: str) -> str:
+    """
+    Extrait le nom du routeur à partir de la configuration.
+    
+    Args:
+        config (str): La configuration du routeur sous forme de chaîne.
+    
+    Returns:
+        str: Le nom du routeur.
+    """
+    lines = config.splitlines()
+    for line in lines:
+        if line.startswith("hostname"):
+            return line.split()[1]
+    return None
+
+
 ##############################################################################
 
 def main():

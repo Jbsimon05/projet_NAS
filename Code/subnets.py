@@ -171,32 +171,14 @@ class SubnetsGen:
         with open(filename, "w") as json_file:
             json.dump(self.subnets, json_file, indent=4)
 
-def get_intent(filename: str) -> dict:
-    """
-    Charge l'intention réseau à partir d'un fichier JSON.
-
-    Args:
-        filename (str): Le chemin vers le fichier JSON.
-
-    Returns:
-        dict: Le dictionnaire d'intention chargé depuis le fichier.
-
-    Exceptions:
-        FileNotFoundError: Si le fichier n'existe pas.
-    """
-    try:
-        with open(filename, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"The file '{filename}' was not found. Please ensure the file exists in the correct path.")
-
 def main():
     """
     Fonction principale pour générer les sous-réseaux à partir d'un fichier intends.json.
     """
     # Load the intent from intends.json
-    intent_file = "intends.json"
-    intent = get_intent(intent_file)
+    intent_file = "intent.json"
+    with open("intent.json", "r") as file:
+        intent = json.load(file)
 
     # Generate subnets.json using SubnetsGen
     subnets_gen = SubnetsGen(intent)
