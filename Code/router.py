@@ -44,16 +44,15 @@ class Router:
         
         self.loopback = f"interface loopback0\n"
         self.loopback += self.subnets[self.router_name]["loopback"]
-        self.loopback += f" ip address {self.loopback} {get_subnet(self.loopback)}\n"
+        self.loopback += f" ip address {self.loopback} {get_subnet(self.subnets[self.router_name]['loopback'])}\n"
 
         self.interfaces = {}
         for interface, specs in self.subnets[self.router_name].items():
             if interface != "loopback":
-                self.interfaces[interface] += f"interface {interface}\n"
-                self.interfaces[interface] += f" ip address {get_subnet(specs["ip"])} {get_mask(specs["ip"])}\n"
-                if interface == "FastEthernet0/0" : self.interfaces[i] += "duplex full\n"
+                self.interfaces[interface] = f"interface {interface}\n"
+                self.interfaces[interface] += f" ip address {get_subnet(specs['ip'])} {get_mask(specs['ip'])}\n"
+                if interface == "FastEthernet0/0" : self.interfaces[interface] += "duplex full\n"
                 self.interfaces[interface] += "negociate auto\n"
-            i += 1
 
     def generate_ospf(self):
         """
@@ -92,8 +91,8 @@ class Router:
         - Définit la source de mise à jour comme Loopback0.
         """
         interface = self.subnets[self.router_name].keys()[0]
-        self.file += f"router bgp {self.subnets[self.router_name][interface]["AS_number"]}\n"
-        self.file += f" bgp router-id {self.subnets[self.router_name]["loopback"]}\n"
+        self.file += f"router bgp {self.subnets[self.router_name][interface]['AS_number']}\n"
+        self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
         self.file += " bgp log-neighbor-changes\n"
         
         

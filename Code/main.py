@@ -1,7 +1,7 @@
 import json
 import time
 from pathlib import Path
-from subnets import SubnetsGen, get_intent
+from subnets import SubnetsGen
 from router import Router
 from c import C
 from p import P
@@ -55,10 +55,39 @@ def edit_config(directories: list[Path], data: dict, subnets: dict) -> None:
                     file.write(new_content)
 
 
+def edit_config_test(data: dict, subnets: dict):
+    """
+    Fonction principale pour générer les fichiers de configuration des routeurs.
+
+    Étapes :
+        1. Charger l'intention réseau depuis le fichier `intends.json`.
+        2. Générer les sous-réseaux à partir de l'intention et les sauvegarder dans un dictionnaire.
+        3. Créer les fichiers de configuration pour chaque routeur en fonction des sous-réseaux générés.
+        4. Sauvegarder chaque configuration dans un fichier `.cfg` correspondant au routeur.
+
+    """
+    # Générer les fichiers de configuration pour chaque routeur
+    for router_name in subnets:
+        if router_name[:2] == "PE":
+            router = PE(router_name, data, subnets)
+        elif router_name[:2] == "CE":
+            router = CE(router_name, data, subnets)
+        elif router_name[0] == "P":
+            router = P(router_name, data, subnets)
+        elif router_name[0] == "C":
+            router = C(router_name, data, subnets)
+            
+        new_content = router.generate_routing_file()
+
+        config_filename = f"{router_name}.cfg"
+        with open("../testConfigFiles/" + config_filename, "w") as config_file:
+            config_file.write(new_content)
+
+
 
 
 if __name__ == "__main__":
     start = time.time()
-    edit_config(directories, data, subnets)
+    edit_config_test(data, subnets)
     end = time.time()
     print("Temps d'exécution total :", end - start)

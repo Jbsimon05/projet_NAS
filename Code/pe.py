@@ -33,7 +33,8 @@ class PE(Router):
         """
         super().generate_interfaces()
         ### @todo : ajouter les noms des vrfs 
-        name_vrf = self.subnets[self.router_name]["vrf_name"]
+        random_interface = list(self.subnets[self.router_name].keys())[0]
+        name_vrf = self.subnets[self.router_name][random_interface]["vrf_name"]
         self.file += self.loopback
         for interface, config in self.interfaces.items():
             self.file += "!\n" + config
