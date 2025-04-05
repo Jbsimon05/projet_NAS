@@ -47,5 +47,6 @@ class C(Router):
         """
         super().generate_init_config()
         self.generate_interfaces()
+        super().generate_ospf()
         super().generate_finale_config()
         return self.file
