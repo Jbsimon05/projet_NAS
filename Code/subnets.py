@@ -156,6 +156,7 @@ class SubnetsGen:
                             "neighbor": neighbor, 
                             "ip" : ipv6_address, 
                             "AS_number": self.intent[AS]['AS_number'],
+                            "vrf_name": AS,
                             "linkType": "BGP" if ( router[1] == "E" == neighbor[1] ) else "OSPF" 
                         }
                     else:

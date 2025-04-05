@@ -32,11 +32,15 @@ class PE(Router):
         - Ajoute des paramètres spécifiques comme OSPF, MPLS ou duplex.
         """
         super().generate_interfaces()
+        ### @todo : ajouter les noms des vrfs 
+        name_vrf = self.subnets[self.router_name]["vrf_name"]
         self.file += self.loopback
         for interface, config in self.interfaces.items():
             self.file += "!\n" + config
             if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
                 self.file += " mpls ip\n"
+            if self.subnets[self.router_name][interface]["linkType"] == "BGP":
+                self.file += " ip vrf forwarding " + name_vrf + "\n"
 
     def generate_routing_file(self):
         """
