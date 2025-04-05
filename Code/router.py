@@ -91,17 +91,17 @@ class Router:
         - Configure l'AS distant.
         - Définit la source de mise à jour comme Loopback0.
         """
-        self.file += "router bgp 10\n"
-        self.file += f" bgp router-id {self.router_name}\n"
+        interface = self.subnets[self.router_name].keys()[0]
+        self.file += f"router bgp {self.subnets[self.router_name][interface]["AS_number"]}\n"
+        self.file += f" bgp router-id {self.subnets[self.router_name]["loopback"]}\n"
         self.file += " bgp log-neighbor-changes\n"
-        self.file += " no bgp default ipv4-unicast\n"
-
-        for interface, specs in self.subnets[self.router_name].items():
-            if interface != "loopback":
-                neighbor_ip = get_subnet(specs["ip"])
-                neighbor_as = specs["AS"]
-                self.file += f" neighbor {neighbor_ip} remote-as {neighbor_as}\n"
-                self.file += f" neighbor {neighbor_ip} update-source Loopback0\n"
+        
+        
+        ### différences entre PE et CE : PE a des liens BGP dans le backbone et advertise en loopback : 
+        ### PE : neighbor {loopback} remote-as 65000
+        ### CE : neighbor {ip} remote-as 65001  
+        ### self.bgp_neighbors = [ router for router in self.intent[self.router_name].keys() if router != "loopback" ]
+        
 
     def generate_finale_config(self):
         """
