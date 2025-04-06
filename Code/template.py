@@ -13,10 +13,10 @@ mpls label protocol ldp
 no ipv6 cef
 multilink bundle-name authenticated
 ip tcp synwait-time 5
-ip forward-protocol nd
 """
 
 FINAL_CONFIG = """\
+ip forward-protocol nd
 no ip http server
 no ip http secure-server
 control-plane
