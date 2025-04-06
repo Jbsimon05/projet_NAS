@@ -1,5 +1,8 @@
 import json
 import ipaddress
+import ipaddress
+from itertools import islice
+from tools import add_ip
 
 class SubnetsGen:
     """
@@ -112,6 +115,9 @@ class SubnetsGen:
         """
         return self.subnet_interconnexion_dict[AS][(routeur1, routeur2)] or self.subnet_interconnexion_dict[AS][(routeur2, routeur1)]
 
+    def generate_all_subnets(self) -> None:
+        self.all_subnets = list(islice(ipaddress.IPv4Network(self.intent["Backbone"]["address"]).subnets(new_prefix=30), 100))
+
     def generate_addresses_dict(self) -> None:
         """
         Génère un dictionnaire contenant les voisins, interfaces, adresses IP et AS pour chaque routeur.
@@ -135,6 +141,7 @@ class SubnetsGen:
         """
         # Creates the subnet_dict
         self.give_subnet_dict()
+        self.generate_all_subnets()
         # Iterate over each AS
         for AS in self.intent:
             # Iterate over each router in the current AS
@@ -151,10 +158,10 @@ class SubnetsGen:
                         elif self.subnet_dict[AS].get((neighbor, router)):
                             subnet_index = self.subnet_dict[AS][(neighbor, router)]
                             router_index = 2
-                        ipv6_address = f"{self.intent[AS]['address'][:-1]}{subnet_index}{self.intent[AS]['subnet_mask']}"
+                        ipv4_address = add_ip(self.all_subnets[subnet_index - 1], router_index)
                         self.subnets[router][interface] = {
                             "neighbor": neighbor, 
-                            "ip" : ipv6_address, 
+                            "ip" : ipv4_address, 
                             "AS_number": self.intent[AS]['AS_number'],
                             "vrf_name": AS,
                             "linkType": "BGP" if ( router[1] == "E" == neighbor[1] ) else "OSPF" 
