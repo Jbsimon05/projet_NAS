@@ -4,22 +4,26 @@ from tools import insert_line, find_index, get_mask, get_subnet, get_reversed_ma
 
 
 class PE(Router):
+
+    def __init__(self, router_name, intent, subnets, idrouter):
+
+
+        super().__init__(router_name, intent, subnets)
+        self.idrouter = idrouter
     """
     Classe représentant un routeur Provider Edge (PE).
     """
     def generate_bgp(self):
         self.file += "router bgp {}\n".format(
-            get_as() # creer cette fonction
+            self.intent["Backbone"]["AS_number"] # creer cette fonction
         )
-        self.file += f" bgp router-id {}\n".format(
-            get_id() # creer cette fonction	
-        )
+        self.file += f" bgp router-id {self.idrouter}\n"
         self.file += " bgp log-neighbor-changes\n"
 
-        for P/PE in ...:
+        for neighbors in self.intent["Backbone"]["routers"][self.router_name]:
             self.file += "neighbor {} remote-as {}\n".format(
-                get_id(PE), #loopback
-                get_as(PE) # creer cette fonction
+                neighbors.idrouter, #loopback
+                getAS() # creer cette fonction
             )
             self.file += "neighbor {} update-source Loopback0\n".format(
                 get_id(PE) #loopback
