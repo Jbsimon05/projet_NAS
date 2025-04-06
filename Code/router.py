@@ -43,34 +43,41 @@ class Router:
         """
         
         self.loopback = f"interface loopback0\n"
-        self.loopback += self.subnets[self.router_name]["loopback"]
-        self.loopback += f" ip address {self.loopback} {get_subnet(self.loopback)}\n"
+        self.loopback += f" ip address {self.loopback} {get_subnet(self.subnets[self.router_name]['loopback'])}\n"
 
-        self.interfaces = ["" for i in range(4)]
-        i = 0
+        self.interfaces = {}
         for interface, specs in self.subnets[self.router_name].items():
             if interface != "loopback":
-                self.interfaces[i] += f"interface {interface}\n"
-                self.interfaces[i] += f" ip address {get_subnet(specs["ip"])} {get_mask(specs["ip"])}\n"
-                if interface == "FastEthernet0/0" : self.interfaces[i] += "duplex full\n"
-                self.interfaces[i] += "negociate auto\n"
-            i += 1
+                self.interfaces[interface] = f" interface {interface}\n"
+                self.interfaces[interface] += f" ip address {get_subnet(specs['ip'])} {get_mask(specs['ip'])}\n"
+                if interface == "FastEthernet0/0" : self.interfaces[interface] += " duplex full\n"
+                self.interfaces[interface] += " negociate auto\n"
 
-    def generate_igp(self):
+    def generate_ospf(self):
         """
         Génère la configuration du protocole de routage IGP (OSPF).
 
-        Cette méthode configure OSPF pour les interfaces du routeur, en définissant
-        les réseaux et les masques inversés associés.
+        Cette méthode est à utiliser pour les sous-classes : P et PE
         """
+        self.max_path = 4
         self.file += "router ospf 1\n"
+
         for interface in self.subnets[self.router_name].keys():
-            if interface != "loopback":
+            if interface == "loopback":
+                self.file += " network {} {} area 0\n".format(
+                    get_subnet(self.subnets[self.router_name]["loopback"]),
+                    get_reversed_mask(self.subnets[self.router_name]["loopback"])
+                )
+            else: 
                 self.file += " network {} {} area 0\n".format(
                     get_subnet(self.subnets[self.router_name][interface]["ip"]),
                     get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
                 )
+        ### @todo: faut rajouter ça ou pas ?
+        # self.file += f" maximum-paths {self.max_path}\n"
 
+
+    ### TODO il faut supprimer cette méthode car uniquement sur PE 
     def generate_bgp(self):
         """
         Génère la configuration du protocole de routage BGP.
@@ -82,17 +89,17 @@ class Router:
         - Configure l'AS distant.
         - Définit la source de mise à jour comme Loopback0.
         """
-        self.file += "router bgp 10\n"
-        self.file += f" bgp router-id {self.router_name}\n"
+        interface = self.subnets[self.router_name].keys()[0]
+        self.file += f"router bgp {self.subnets[self.router_name][interface]['AS_number']}\n"
+        self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
         self.file += " bgp log-neighbor-changes\n"
-        self.file += " no bgp default ipv4-unicast\n"
-
-        for interface, specs in self.subnets[self.router_name].items():
-            if interface != "loopback":
-                neighbor_ip = get_subnet(specs["ip"])
-                neighbor_as = specs["AS"]
-                self.file += f" neighbor {neighbor_ip} remote-as {neighbor_as}\n"
-                self.file += f" neighbor {neighbor_ip} update-source Loopback0\n"
+        
+        
+        ### différences entre PE et CE : PE a des liens BGP dans le backbone et advertise en loopback : 
+        ### PE : neighbor {loopback} remote-as 65000
+        ### CE : neighbor {ip} remote-as 65001  
+        ### self.bgp_neighbors = [ router for router in self.intent[self.router_name].keys() if router != "loopback" ]
+        
 
     def generate_finale_config(self):
         """
@@ -103,6 +110,7 @@ class Router:
         """
         self.file += FINAL_CONFIG
 
+    ### TODO : a supprimer à terme 
     def generate_routing_file(self):
         """
         Génère le fichier de configuration complet pour le routeur.
@@ -115,7 +123,6 @@ class Router:
         """
         self.generate_init_config()
         self.generate_interfaces()
-        self.generate_igp()
         self.generate_bgp()
         self.generate_finale_config()
         return self.file

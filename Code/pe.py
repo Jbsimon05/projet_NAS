@@ -5,7 +5,7 @@ from tools import insert_line, find_index, get_mask, get_subnet, get_reversed_ma
 
 class PE(Router):
     """
-    Provider Edge (PE) router.
+    Classe représentant un routeur Provider Edge (PE).
     """
     def generate_bgp(self):
         self.file += "router bgp {}\n".format(

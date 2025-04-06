@@ -1,8 +1,8 @@
 {
     "Backbone": {
-        "address": "192.168.1.0",
+        "AS_number": "65000",
+        "address": "192.168.1.0/24",
         "loopback": "192.168.100.0",
-        "subnet_mask": "/8",
         "routers": {
             "PE1": {
                 "P1": "FastEthernet0/0",
@@ -45,6 +45,7 @@
         "protocol": "OSPF"
     },
     "Red": {
+        "AS_number": "65001",
         "address": "192.16.2.0",
         "subnet_mask": "/8",
         "routers": {
@@ -73,6 +74,7 @@
         "protocol": "OSPF"
     }, 
     "Green": {
+        "AS_number": "65002",
         "address": "192.16.3.0",
         "subnet_mask": "/8",
         "routers": {
@@ -101,6 +103,7 @@
         "protocol": "OSPF"
     },
     "Blue": {
+        "AS_number": "65003",
         "address": "192.16.3.0",
         "subnet_mask": "/8",
         "routers": {

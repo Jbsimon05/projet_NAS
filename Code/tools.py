@@ -1,4 +1,5 @@
 import ipaddress
+from ipaddress import IPv4Interface
 import math
 
 def insert_line(filename, index_line: int, data: str) -> None:
@@ -31,9 +32,8 @@ def find_index(filename, line: str) -> int:
         lines = file.readlines()
     return lines.index(line)
 
-
+"""
 def get_subnet(ip_with_suffix: str) -> str:
-    """
     Calcule le sous-réseau correspondant à une adresse IP avec suffixe CIDR.
     
     Args:
@@ -41,7 +41,6 @@ def get_subnet(ip_with_suffix: str) -> str:
     
     Returns:
         str: L'adresse du sous-réseau au format IPv4.
-    """
     ip_part, suffix = ip_with_suffix.split('/')
     suffix = int(suffix)
     ip_octets = list(map(int, ip_part.split('.')))
@@ -59,7 +58,7 @@ def get_subnet(ip_with_suffix: str) -> str:
     # Reconvertir en format IPv4
     subnet_ip = '.'.join(str((subnet_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
     return subnet_ip
-
+"""
 
 def get_mask(bits_to_clear: str) -> str:
     """
@@ -100,6 +99,26 @@ def get_reversed_mask(bits_to_clear: str) -> str:
     # Invert and convert back to dotted decimal
     reversed_int = ~mask_int & 0xFFFFFFFF
     return '.'.join(str((reversed_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+
+def get_router_name(config: str) -> str:
+    """
+    Extrait le nom du routeur à partir de la configuration.
+    
+    Args:
+        config (str): La configuration du routeur sous forme de chaîne.
+    
+    Returns:
+        str: Le nom du routeur.
+    """
+    lines = config.splitlines()
+    for line in lines:
+        if line.startswith("hostname"):
+            return line.split()[1]
+    return None
+
+add_ip = lambda ip_cidr, n: str(IPv4Interface(intf := IPv4Interface(ip_cidr)).ip + n) + '/' + str(intf.network.prefixlen)
+
+get_subnet = lambda ip_cidr: str(IPv4Interface(ip_cidr).network.network_address)
 
 ##############################################################################
 

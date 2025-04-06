@@ -7,6 +7,14 @@ class CE(Router):
     Classe pour générer un Customer Edge (CE) router.
     """
     def __init__(self, router_name, intent, subnets):
+        """
+        Initialise un objet CE.
+
+        Args:
+            router_name (str): Nom du routeur.
+            intent (dict): Intentions de configuration pour le routeur.
+            subnets (dict): Dictionnaire contenant les sous-réseaux associés au routeur.
+        """
         super().__init__(router_name, intent, subnets)
 
     def generate_interfaces(self):
@@ -23,9 +31,9 @@ class CE(Router):
         """
         super().generate_interfaces()
         self.file += self.loopback
-        for interface in self.interfaces:
-            self.file += "!\n" + interface + "!\n"
-    
+        for config in self.interfaces.values():
+            self.file += "!\n" + config + "!\n"
+
     def generate_routing_file(self):
         """
         Génère le fichier de configuration complet pour le routeur.
@@ -34,7 +42,8 @@ class CE(Router):
         (initiale, interfaces, IGP, BGP et finale) et retourne le fichier complet.
 
         Returns:
-            str: Le fichier de configuration complet sous forme de chaîne de caractères.        """
+            str: Le fichier de configuration complet sous forme de chaîne de caractères.
+        """
         super().generate_init_config()
         self.generate_interfaces()
         super().generate_finale_config()
