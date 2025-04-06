@@ -42,12 +42,12 @@ class CE(Router):
         Génère la configuration BGP pour le routeur CE.
         """
         as_number = self.subnets[self.router_name]["FastEthernet0/0"]["AS_number"]
-        neighbor_ip = self.subnets[self.router_name]["FastEthernet0/0"]["neighbor_ip"]
+        neighbor_ip = self.subnets[self.router_name]["FastEthernet0/0"]["ip"]
 
         self.file += f"router bgp {as_number}\n"
         self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
         self.file += " bgp log-neighbor-changes\n"
-        self.file += f" neighbor {neighbor_ip} remote-as {self.intent['remote_as']}\n"
+        self.file += f" neighbor {neighbor_ip} remote-as {as_number}\n"
         self.file += " !\n"
         self.file += " address-family ipv4\n"
         self.file += "  redistribute connected\n"
