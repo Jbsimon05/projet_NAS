@@ -111,18 +111,18 @@ class Router:
         self.file += FINAL_CONFIG
 
     ### TODO : a supprimer à terme 
-    def generate_routing_file(self):
-        """
-        Génère le fichier de configuration complet pour le routeur.
+    # def generate_routing_file(self):
+    #     """
+    #     Génère le fichier de configuration complet pour le routeur.
 
-        Cette méthode appelle les différentes étapes de génération de configuration
-        (initiale, interfaces, IGP, BGP et finale) et retourne le fichier complet.
+    #     Cette méthode appelle les différentes étapes de génération de configuration
+    #     (initiale, interfaces, IGP, BGP et finale) et retourne le fichier complet.
 
-        Returns:
-            str: Le fichier de configuration complet sous forme de chaîne de caractères.
-        """
-        self.generate_init_config()
-        self.generate_interfaces()
-        self.generate_bgp()
-        self.generate_finale_config()
-        return self.file
+    #     Returns:
+    #         str: Le fichier de configuration complet sous forme de chaîne de caractères.
+    #     """
+    #     self.generate_init_config()
+    #     self.generate_interfaces()
+    #     self.generate_bgp()
+    #     self.generate_finale_config()
+    #     return self.file
