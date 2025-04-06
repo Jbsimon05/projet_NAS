@@ -17,46 +17,47 @@ class PE(Router):
         self.file += "router bgp {}\n".format(
             self.intent["Backbone"]["AS_number"] # creer cette fonction
         )
-        self.file += f" bgp router-id {self.idrouter}\n"
+        self.file += f" bgp router-id {self.subnets[self.router_name]["loopback"]}\n"
         self.file += " bgp log-neighbor-changes\n"
 
         for neighbors in self.intent["Backbone"]["routers"][self.router_name]:
             self.file += "neighbor {} remote-as {}\n".format(
-                neighbors.idrouter, #loopback
-                getAS() # creer cette fonction
+                self.subnets[neighbors]["loopback"], #loopback
+                self.subnets[neighbors]["FastEthernet0/0"]["AS_number"]
             )
             self.file += "neighbor {} update-source Loopback0\n".format(
-                get_id(PE) #loopback
+                self.subnets[neighbors]["loopback"], #loopback
             )
         self.file += " !\n"
         self.file += " address-family ipv4\n"
-        for PE/P in ...:
+        for neighbors in self.intent["Backbone"]["routers"][self.router_name]:
             self.file += "  neighbor {} activate\n".format(
-                get_id(PE) #loopback
+                self.subnets[neighbors]["loopback"], #loopback
             )
             self.file += "  neighbor {} send-community both\n".format(
-                get_id(PE) #get loopback 
+                self.subnets[neighbors]["loopback"], #loopback
             )
         self.file += " exit-address-family\n"
         self.file += " !\n"
-        for CE in ...:
+        for neighbors in self.intent["Backbone"]["routers"][self.router_name]:
+            if neighbors[0] == "C":
 
-            self.file += " address-family ipv4 vrf {}\n".format(
-            get_vrf(CE) # creer cette fonction
-            )
-            self.file += "  neighbor {} remote-as {}\n".format(
-                get_id(CE), #loopback
-                get_as(CE) # creer cette fonction
-            )
-            self.file += "  neighbor {} activate\n".format(
-                get_id(CE), #loopback
+                self.file += " address-family ipv4 vrf {}\n".format(
+                    self.subnets[neighbors]["FastEthernet0/0"]["vrf_name"] # creer cette fonction
+                )
+                self.file += "  neighbor {} remote-as {}\n".format(
+                    self.subnets[neighbors]["loopback"], #loopback
+                    self.subnets[neighbors]["FastEthernet0/0"]["AS_number"] # creer cette fonction
+                )
+                self.file += "  neighbor {} activate\n".format(
+                    self.subnets[neighbors]["loopback"], #loopback
 
-            )
-            self.file += "  neighbor {} send-community both\n".format(
-                get_id(CE), #loopback
+                )
+                self.file += "  neighbor {} send-community both\n".format(
+                    self.subnets[neighbors]["loopback"], #loopback
 
-            )
-            self.file += " exit address-family\n"
+                )
+                self.file += " exit address-family\n"
 
 
 
