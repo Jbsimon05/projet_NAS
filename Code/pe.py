@@ -5,11 +5,11 @@ from tools import insert_line, find_index, get_mask, get_subnet, get_reversed_ma
 
 class PE(Router):
 
-    def __init__(self, router_name, intent, subnets, idrouter):
+    def __init__(self, router_name, intent, subnets):
 
 
         super().__init__(router_name, intent, subnets)
-        self.idrouter = idrouter
+
     """
     Classe représentant un routeur Provider Edge (PE).
     """
