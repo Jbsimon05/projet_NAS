@@ -1,155 +1,230 @@
-#PE1
-conf t
-    hostname PE1
+#PE_1
+conf t 
+    hostname PE_1 
     ip routing 
     mpls ip 
+
     router ospf 1
-        router-id 105.105.105.105
-        passive-interface GigabitEthernet2/0
-        passive-interface GigabitEthernet3/0
-        exit 
+        router-id 100.0.0.1
+        maximum-paths 3
+        exit
 
     ip vrf CLIENT_A
 		rd 65000:1
 		route-target export 65000:1
 		route-target import 65000:1
         exit
-	ip vrf CLIENT_B
+
+    ip vrf CLIENT_B
 		rd 65000:2
 		route-target export 65000:2
 		route-target import 65000:2
         exit
-
-    interface Loopback0 
-        ip address 105.105.105.105 255.255.255.255
-        ip ospf 1 area 0
-        no shutdown 
+    
+    interface GigabitEthernet2/0 
+        ip vrf forwarding CLIENT_A 
+        ip address 192.168.1.2 255.255.255.0
+        no shutdown
         exit 
-    interface GigabitEthernet1/0
+    
+    interface Loopback0 
+        ip address 100.0.0.1 255.255.255.255
+        ip ospf 1 area 0
+        no shutdown
+        exit 
+
+    interface GigabitEthernet1/0 
         ip address 192.168.3.1 255.255.255.0
         ip ospf 1 area 0
         mpls ip
-        no shutdown 
-        exit 
-    interface GigabitEthernet2/0
-        ip vrf forwarding CLIENT_A 
-        ip address 192.168.1.2 255.255.255.0
-        ip ospf 1 area 0
-        no shutdown 
-        exit 
-    interface GigabitEthernet3/0
-        ip vrf forwarding CLIENT_B 
+        no shutdown
+        exit
+
+    interface GigabitEthernet3/0 
+        ip vrf forwarding CLIENT_B
         ip address 192.168.2.2 255.255.255.0
-        ip ospf 1 area 0
-        no shutdown 
+        no shutdow
         exit 
-    
+
     router bgp 65000
-        bgp router-id 105.105.105.105
+        bgp router-id 100.0.0.1
         bgp default ipv4 
         bgp log-neighbor-changes
-        neighbor 192.168.5.2 remote-as 65000
-        neighbor 192.168.5.2 update-source Loopback0  
-    
+
+        #P1 
+        neighbor 103.0.0.1 remote-as 65000
+        neighbor 103.0.0.1 update-source Loopback0
+        #P2
+        neighbor 103.0.0.2 remote-as 65000
+        neighbor 103.0.0.2 update-source Loopback0
+        #P3
+        neighbor 103.0.0.3 remote-as 65000
+        neighbor 103.0.0.3 update-source Loopback0
+        #PE2 
+        neighbor 100.0.0.2 remote-as 65000
+        neighbor 100.0.0.2 update-source Loopback0
+
         address-family vpnv4 
-            neighbor 192.168.5.2 activate
-            neighbor 192.168.5.2 send-community both 
+            #P1
+            neighbor 103.0.0.1 activate 
+            neighbor 103.0.0.1 send-community both
+            #P2  
+            neighbor 103.0.0.2 activate 
+            neighbor 103.0.0.2 send-community both 
+            #P3
+            neighbor 103.0.0.3 activate
+            neighbor 103.0.0.3 send-community both
+            #PE2
+            neighbor 100.0.0.2 activate
+            neighbor 100.0.0.2 send-community both
             exit
         
-        address-family ipv4 
-            neighbor 192.168.5.2 activate
-            neighbor 192.168.5.2 send-community both 
-            network 105.105.105.105 mask 255.255.255.255
+        address-family ipv4
+            #P1  
+            neighbor 103.0.0.1 activate 
+            neighbor 103.0.0.1 send-community both 
+            #P2 
+            neighbor 103.0.0.2 activate 
+            neighbor 103.0.0.2 send-community both 
+            #P3
+            neighbor 103.0.0.3 activate
+            neighbor 103.0.0.3 send-community both
+            #PE2
+            neighbor 100.0.0.2 activate
+            neighbor 100.0.0.2 send-community both 
+
+            network 100.0.0.1 mask 255.255.255.255
             exit
 
         address-family ipv4 vrf CLIENT_A
             neighbor 192.168.1.1 remote-as 65001
             neighbor 192.168.1.1 activate
             exit
-        address-family ipv4 vrf CLIENT_B
+        
+        address-family ipv4 vrf CLIENT_B 
             neighbor 192.168.2.1 remote-as 65002
             neighbor 192.168.2.1 activate
-            exit 
-        exit
+        exit 
     exit 
-write 
+write
 
 
 
 
 
-#PE2
-conf t
-
+#PE_2
+conf t 
+    hostname PE_2 
     ip routing 
     mpls ip 
+
     router ospf 1
-        router-id 106.106.106.106
-        exit 
+        router-id 100.0.0.2
+        maximum-paths 3
 
     ip vrf CLIENT_A
 		rd 65000:1
 		route-target export 65000:1
 		route-target import 65000:1
         exit
-	ip vrf CLIENT_B
+    
+    ip vrf CLIENT_B
 		rd 65000:2
 		route-target export 65000:2
 		route-target import 65000:2
         exit
-
-    interface Loopback0 
-        ip address 106.106.106.106 255.255.255.255
-        ip ospf 1 area 0
-        no shutdown 
+    
+    interface GigabitEthernet2/0 
+        ip vrf forwarding CLIENT_A 
+        ip address 192.168.6.1 255.255.255.0
+        no shutdown
         exit 
-    interface GigabitEthernet1/0
+    
+    interface GigabitEthernet3/0 
+        ip vrf forwarding CLIENT_B 
+        ip address 192.168.7.1 255.255.255.0
+        no shutdown
+        exit
+    
+    interface Loopback0 
+        ip address 100.0.0.2 255.255.255.255
+        ip ospf 1 area 0
+        no shutdown
+        exit 
+    
+    interface GigabitEthernet1/0 
         ip address 192.168.5.2 255.255.255.0
         ip ospf 1 area 0
         mpls ip
-        no shutdown 
-        exit 
-    interface GigabitEthernet2/0
-        ip vrf forwarding CLIENT_A 
-        ip address 192.168.6.1 255.255.255.0
-        ip ospf 1 area 0
-        mpls ip
-        no shutdown 
-        exit 
-    interface GigabitEthernet3/0
-        ip vrf forwarding CLIENT_B
-        ip address 192.168.7.1 255.255.255.0
-        ip ospf 1 area 0
-        mpls ip
-        no shutdown 
-        exit 
+        no shutdown
+        exit
     
+    interface FastEthernet0/0 
+        ip address 192.168.9.2 255.255.255.0
+        ip ospf 1 area 0
+        mpls ip
+        no shutdown
+        exit
+
     router bgp 65000
-        bgp router-id 106.106.106.106
+        bgp router-id 100.0.0.2
         bgp default ipv4 
         bgp log-neighbor-changes
-        neighbor 192.168.3.1 remote-as 65000
-        neighbor 192.168.3.1 update-source Loopback0 
-        neighbor 192.168.6.2 remote-as 65001
-        neighbor 192.168.6.2 update-source Loopback0 
-        neighbor 192.168.7.2 remote-as 65002
-        neighbor 192.168.7.2 update-source Loopback0 
-    
+
+        #P1
+        neighbor 103.0.0.1 remote-as 65000
+        neighbor 103.0.0.1 update-source Loopback0
+        #P2 
+        neighbor 103.0.0.2 remote-as 65000
+        neighbor 103.0.0.2 update-source Loopback0
+        #P3 
+        neighbor 103.0.0.3 remote-as 65000
+        neighbor 103.0.0.3 update-source Loopback0
+        #PE1
+        neighbor 100.0.0.1 remote-as 65000
+        neighbor 100.0.0.1 update-source Loopback0
+
         address-family vpnv4 
-            neighbor 192.168.3.1 activate
-            neighbor 192.168.3.1 send-community extended 
-            neighbor 192.168.6.2 activate
-            neighbor 192.168.6.2 send-community extended 
-            neighbor 192.168.7.2 activate
-            neighbor 192.168.7.2 send-community extended 
+            #P1 
+            neighbor 103.0.0.1 activate 
+            neighbor 103.0.0.1 send-community both 
+            #P2 
+            neighbor 103.0.0.2 activate 
+            neighbor 103.0.0.2 send-community both
+            #P3 
+            neighbor 103.0.0.3 activate
+            neighbor 103.0.0.3 send-community both
+            #PE1
+            neighbor 100.0.0.1 activate
+            neighbor 100.0.0.1 send-community both 
             exit
         
-        address-family ipv4 vrf CLIENT_A
-            redistribute connected
+        address-family ipv4 
+            #P1 
+            neighbor 103.0.0.1 activate 
+            neighbor 103.0.0.1 send-community both 
+            #P2 
+            neighbor 103.0.0.2 activate 
+            neighbor 103.0.0.2 send-community both 
+            #P3 
+            neighbor 103.0.0.3 activate
+            neighbor 103.0.0.3 send-community both
+            #PE1
+            neighbor 100.0.0.1 activate
+            neighbor 100.0.0.1 send-community both 
+
+            network 100.0.0.2 mask 255.255.255.255
             exit
+
+        address-family ipv4 vrf CLIENT_A
+            neighbor 192.168.6.2 remote-as 65001
+            neighbor 192.168.6.2 activate
+            exit
+        
         address-family ipv4 vrf CLIENT_B
-            redistribute connected
+            neighbor 192.168.7.2 remote-as 65002
+            neighbor 192.168.7.2 activate
             exit
         exit 
     exit 
-write 
+write
