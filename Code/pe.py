@@ -10,6 +10,16 @@ class PE(Router):
 
         super().__init__(router_name, intent, subnets)
 
+    def generate_routing_file(self) -> str:
+        print("waka")
+        self.generate_init_config()
+        self.generate_vrf()
+        self.generate_init_config2(True)
+        self.generate_interfaces()
+        self.generate_ospf()
+        self.generate_bgp()
+        self.generate_finale_config()
+        return self.file
     """
     Classe représentant un routeur Provider Edge (PE).
     """
@@ -17,7 +27,7 @@ class PE(Router):
         self.file += "router bgp {}\n".format(
             self.intent["Backbone"]["AS_number"] # creer cette fonction
         )
-        self.file += f" bgp router-id {self.subnets[self.router_name]["loopback"]}\n"
+        self.file += f' bgp router-id {self.subnets[self.router_name]["loopback"]}\n'
         self.file += " bgp log-neighbor-changes\n"
 
         for neighbors in self.intent["Backbone"]["routers"]:
@@ -106,8 +116,8 @@ class PE(Router):
             if self.subnets[self.router_name][interface]["linkType"] == "BGP":
                 neighbor = self.subnets[self.router_name][interface]["neighbor"]
                 for keys in list(self.subnets[neighbor].keys()):
-                    if keys[0][0] in "GF": 
-                        self.file += f" ip vrf forwarding {self.subnets[neighbor][keys[0][0]]["vrf_name"]}\n"
+                    if keys[0] in "GF": 
+                        self.file += f' ip vrf forwarding {self.subnets[neighbor][keys]["vrf_name"]}\n'
                         break
             self.file += "!\n" + config
             if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
@@ -150,15 +160,6 @@ class PE(Router):
 
         
 
-    def generate_routing_file(self) -> str:
-        self.generate_init_config()
-        self.generate_vrf()
-        self.generate_init_config2(True)
-        self.generate_interfaces()
-        self.generate_ospf()
-        self.generate_bgp()
-        self.generate_finale_config()
-        return self.file
 
 
 
