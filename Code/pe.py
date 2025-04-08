@@ -82,14 +82,8 @@ class PE(Router):
 
 
 
-    def generate_igp(self):
-        self.file += "router ospf 1\n"
-        for interface in self.subnets[self.router_name].keys():
-            #if interface != "loopback":#
-                self.file += " network {} {} area 0\n".format(
-                    get_subnet(self.subnets[self.router_name][interface]["ip"]),
-                    get_subnet_mask(self.subnets[self.router_name][interface]["ip"])
-                )    
+
+
 
 
     def generate_interfaces(self):
@@ -155,7 +149,7 @@ class PE(Router):
         self.generate_init_config()
         self.generate_vrf()
         self.generate_interfaces()
-        self.generate_igp()
+        self.generate_ospf()
         self.generate_bgp()
         self.generate_finale_config()
         return self.file

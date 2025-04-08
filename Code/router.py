@@ -66,46 +66,27 @@ class Router:
 
         Cette méthode est à utiliser pour les sous-classes : P et PE
         """
-        self.max_path = 4
+        self.max_path = 3
         self.file += "router ospf 1\n"
 
         for interface in self.subnets[self.router_name].keys():
-            if interface == "loopback":
-                self.file += " network {} {} area 0\n".format(
-                    get_subnet_mask(self.subnets[self.router_name]["loopback"]),
-                    get_wildcard_mask(self.subnets[self.router_name]["loopback"])
-                )
-            else: 
-                self.file += " network {} {} area 0\n".format(
-                    get_subnet(self.subnets[self.router_name][interface]["ip"]),
-                    get_wildcard_mask(self.subnets[self.router_name][interface]["ip"])
-                )
-        ### @todo: faut rajouter ça ou pas ?
+            if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
+                if interface == "loopback":
+                    self.file += " network {} {} area 0\n".format(
+                        get_subnet_mask(self.subnets[self.router_name]["loopback"]),
+                        get_wildcard_mask(self.subnets[self.router_name]["loopback"])
+                    )
+                else: 
+                    self.file += " network {} {} area 0\n".format(
+                        get_subnet(self.subnets[self.router_name][interface]["ip"]),
+                        get_wildcard_mask(self.subnets[self.router_name][interface]["ip"])
+                    )
+
+
         self.file += f" maximum-paths {self.max_path}\n"
 
 
-    ### TODO il faut supprimer cette méthode car uniquement sur PE 
-    def generate_bgp(self):
-        """
-        Génère la configuration du protocole de routage BGP.
 
-        Cette méthode configure BGP pour le routeur, en définissant les voisins,
-        leurs AS (Autonomous System) et les sources de mise à jour.
-
-        Pour chaque interface non-loopback :
-        - Configure l'AS distant.
-        - Définit la source de mise à jour comme Loopback0.
-        """
-        interface = self.subnets[self.router_name].keys()[0]
-        self.file += f"router bgp {self.subnets[self.router_name][interface]['AS_number']}\n"
-        self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
-        self.file += " bgp log-neighbor-changes\n"
-        
-        
-        ### différences entre PE et CE : PE a des liens BGP dans le backbone et advertise en loopback : 
-        ### PE : neighbor {loopback} remote-as 65000
-        ### CE : neighbor {ip} remote-as 65001  
-        ### self.bgp_neighbors = [ router for router in self.intent[self.router_name].keys() if router != "loopback" ]
         
 
     def generate_finale_config(self, isMpls: bool = False):
