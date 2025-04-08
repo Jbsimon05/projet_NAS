@@ -79,6 +79,8 @@ class PE(Router):
                             )
                             self.file += " exit address-family\n"
 
+                            break
+
 
 
 
@@ -139,6 +141,9 @@ class PE(Router):
                                     self.subnets[CE][keys]["AS_number"] # creer cette fonction
                                 )
                                 self.file += "!\n"
+                            
+                                break
+                        break
 
 
 
