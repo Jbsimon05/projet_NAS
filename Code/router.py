@@ -53,8 +53,7 @@ class Router:
                     self.interfaces[interface] += f" ip address {get_subnet(specs['ip'])} {get_mask(specs['ip'])}\n"
                     if interface == "FastEthernet0/0" : self.interfaces[interface] += " duplex full\n"
                     self.interfaces[interface] += " negociate auto\n"
-                    self.interfaces[interface] += f" ip ospf cost {specs['ospf_cost']}\n"
-
+                    
     def generate_ospf(self):
         """
         Génère la configuration du protocole de routage IGP (OSPF).
