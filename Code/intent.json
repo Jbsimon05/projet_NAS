@@ -6,9 +6,9 @@
         "routers": {
             "PE1": {
                 "P1": {"link": "FastEthernet0/0", "ospf_cost": 10},
-                "CE-R1": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
-                "CE-G1": {"link": "GigabitEthernet2/0", "ospf_cost": 5},
-                "CE-B1": {"link": "GigabitEthernet3/0", "ospf_cost": 5}
+                "CE-R1": {"link": "GigabitEthernet1/0"},
+                "CE-G1": {"link": "GigabitEthernet2/0"},
+                "CE-B1": {"link": "GigabitEthernet3/0"}
             },
             "P1": {
                 "PE1": {"link": "FastEthernet0/0", "ospf_cost": 10},
@@ -31,15 +31,15 @@
             }, 
             "PE2": {
                 "P3": {"link": "FastEthernet0/0", "ospf_cost": 25},
-                "CE-R2": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
-                "CE-G2": {"link": "GigabitEthernet2/0", "ospf_cost": 5},
-                "CE-B2": {"link": "GigabitEthernet3/0", "ospf_cost": 5}
+                "CE-R2": {"link": "GigabitEthernet1/0"},
+                "CE-G2": {"link": "GigabitEthernet2/0"},
+                "CE-B2": {"link": "GigabitEthernet3/0"}
             }, 
             "PE3": {
                 "P4": {"link": "FastEthernet0/0", "ospf_cost": 30},
-                "CE-R3": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
-                "CE-G3": {"link": "GigabitEthernet2/0", "ospf_cost": 5},
-                "CE-B3": {"link": "GigabitEthernet3/0", "ospf_cost": 5}
+                "CE-R3": {"link": "GigabitEthernet1/0"},
+                "CE-G3": {"link": "GigabitEthernet2/0"},
+                "CE-B3": {"link": "GigabitEthernet3/0"}
             }
         },
         "protocol": "OSPF"
@@ -50,15 +50,15 @@
         "subnet_mask": "/8",
         "routers": {
             "CE-R1": {
-                "PE1": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE1": {"link": "GigabitEthernet1/0"},
                 "C-R1": {"link": "FastEthernet0/0", "ospf_cost": 5}
             },
             "CE-R2": {
-                "PE2": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE2": {"link": "GigabitEthernet1/0"},
                 "C-R2": {"link": "FastEthernet0/0", "ospf_cost": 5}
             }, 
             "CE-R3": {
-                "PE3": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE3": {"link": "GigabitEthernet1/0"},
                 "C-R3": {"link": "FastEthernet0/0", "ospf_cost": 5}
             },
             "C-R1": {
@@ -79,15 +79,15 @@
         "subnet_mask": "/8",
         "routers": {
             "CE-G1": {
-                "PE1": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE1": {"link": "GigabitEthernet1/0"},
                 "C-G1": {"link": "FastEthernet0/0", "ospf_cost": 5}
             },
             "CE-G2": {
-                "PE2": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE2": {"link": "GigabitEthernet1/0"},
                 "C-G2": {"link": "FastEthernet0/0", "ospf_cost": 5}
             }, 
             "CE-G3": {
-                "PE3": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE3": {"link": "GigabitEthernet1/0"},
                 "C-G3": {"link": "FastEthernet0/0", "ospf_cost": 5}
             },
             "C-G1": {
@@ -108,15 +108,15 @@
         "subnet_mask": "/8",
         "routers": {
             "CE-B1": {
-                "PE1": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE1": {"link": "GigabitEthernet1/0"},
                 "C-B1": {"link": "FastEthernet0/0", "ospf_cost": 5}
             },
             "CE-B2": {
-                "PE2": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE2": {"link": "GigabitEthernet1/0"},
                 "C-B2": {"link": "FastEthernet0/0", "ospf_cost": 5}
             }, 
             "CE-B3": {
-                "PE3": {"link": "GigabitEthernet1/0", "ospf_cost": 5},
+                "PE3": {"link": "GigabitEthernet1/0"},
                 "C-B3": {"link": "FastEthernet0/0", "ospf_cost": 5}
             },
             "C-B1": {
