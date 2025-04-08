@@ -9,9 +9,6 @@ from p import P
 from ce import CE
 from tools import get_router_name
 
-
-
-
 with open('intent.json', 'r') as file:
     data = json.load(file)
 
@@ -19,7 +16,6 @@ subnet = SubnetsGen(data)
 
 with open('subnets.json', 'r') as file:
     subnets = json.load(file)
-
 
 ### @TODO : changer ce path
 # local_path = Path("C:/Users/jbsim/GNS3/projects/")
@@ -54,7 +50,6 @@ def edit_config(directories: list[Path], data: dict, subnets: dict) -> None:
                 with open(item, 'w') as file:
                     file.write(new_content)
 
-
 def edit_config_test(data: dict, subnets: dict):
     """
     Fonction principale pour générer les fichiers de configuration des routeurs.
@@ -83,9 +78,6 @@ def edit_config_test(data: dict, subnets: dict):
         config_filename = f"{router_name}.cfg"
         with open("../testConfigFiles/" + config_filename, "w") as config_file:
             config_file.write(new_content)
-
-
-
 
 if __name__ == "__main__":
     start = time.time()
