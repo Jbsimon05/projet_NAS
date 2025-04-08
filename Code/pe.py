@@ -20,44 +20,63 @@ class PE(Router):
         self.file += f" bgp router-id {self.subnets[self.router_name]["loopback"]}\n"
         self.file += " bgp log-neighbor-changes\n"
 
-        for neighbors in self.intent["Backbone"]["routers"][self.router_name]:
-            self.file += "neighbor {} remote-as {}\n".format(
-                self.subnets[neighbors]["loopback"], #loopback
-                self.subnets[neighbors]["FastEthernet0/0"]["AS_number"]
-            )
-            self.file += "neighbor {} update-source Loopback0\n".format(
-                self.subnets[neighbors]["loopback"], #loopback
-            )
+        for neighbors in self.intent["Backbone"]["routers"]:
+            if neighbors != self.router_name:
+                self.file += "neighbor {} remote-as {}\n".format(
+                    self.subnets[neighbors]["loopback"], #loopback
+                    self.subnets[neighbors]["FastEthernet0/0"]["AS_number"]
+                )
+                self.file += "neighbor {} update-source Loopback0\n".format(
+                    self.subnets[neighbors]["loopback"], #loopback
+                )
         self.file += " !\n"
         self.file += " address-family ipv4\n"
-        for neighbors in self.intent["Backbone"]["routers"][self.router_name]:
-            self.file += "  neighbor {} activate\n".format(
-                self.subnets[neighbors]["loopback"], #loopback
-            )
-            self.file += "  neighbor {} send-community both\n".format(
-                self.subnets[neighbors]["loopback"], #loopback
-            )
-        self.file += " exit-address-family\n"
-        self.file += " !\n"
-        for neighbors in self.intent["Backbone"]["routers"][self.router_name]:
-            if neighbors[0] == "C":
-
-                self.file += " address-family ipv4 vrf {}\n".format(
-                    self.subnets[neighbors]["FastEthernet0/0"]["vrf_name"] # creer cette fonction
-                )
-                self.file += "  neighbor {} remote-as {}\n".format(
-                    self.subnets[neighbors]["loopback"], #loopback
-                    self.subnets[neighbors]["FastEthernet0/0"]["AS_number"] # creer cette fonction
-                )
+        for neighbors in self.intent["Backbone"]["routers"]:
+            if neighbors != self.router_name:
                 self.file += "  neighbor {} activate\n".format(
                     self.subnets[neighbors]["loopback"], #loopback
-
                 )
                 self.file += "  neighbor {} send-community both\n".format(
                     self.subnets[neighbors]["loopback"], #loopback
-
                 )
-                self.file += " exit address-family\n"
+        self.file += " exit-address-family\n"
+        self.file += " !\n"
+        self.file += " address-family vpnv4\n"	
+        for neighbor in self.intent["Backbone"]["routers"]:
+            if (neighbors != self.router_name) and (neighbors[0] == "P") and (neighbors[0] == "E"):
+                self.file += "  neighbor {} activate\n".format(
+                    self.subnets[neighbors]["loopback"], #loopback
+                )
+                self.file += "  neighbor {} send-community extended\n".format(
+                    self.subnets[neighbors]["loopback"], #loopback
+                )
+        self.file += " exit-address-family\n"
+        self.file += " !\n"
+  
+
+
+                
+
+        for neighbors in self.intent["Backbone"]["routers"]:
+            if neighbors != self.router_name:
+                if neighbors[0] == "C":
+
+                    self.file += " address-family ipv4 vrf {}\n".format(
+                        self.subnets[neighbors]["FastEthernet0/0"]["vrf_name"] # creer cette fonction
+                    )
+                    self.file += "  neighbor {} remote-as {}\n".format(
+                        self.subnets[neighbors]["loopback"], #loopback
+                        self.subnets[neighbors]["FastEthernet0/0"]["AS_number"] # creer cette fonction
+                    )
+                    self.file += "  neighbor {} activate\n".format(
+                        self.subnets[neighbors]["loopback"], #loopback
+
+                    )
+                    self.file += "  neighbor {} send-community both\n".format(
+                        self.subnets[neighbors]["loopback"], #loopback
+
+                    )
+                    self.file += " exit address-family\n"
 
 
 
@@ -70,4 +89,43 @@ class PE(Router):
                     get_subnet(self.subnets[self.router_name][interface]["ip"]),
                     get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
                 )    
-#a changer#
+
+
+    def generate_interfaces(self):
+        """
+        Génère la configuration des interfaces pour le routeur.
+
+        Cette méthode configure les interfaces en fonction des sous-réseaux définis
+        dans le dictionnaire `subnets`. Elle gère les interfaces de type loopback,
+        FastEthernet et les liens OSPF ou IBGP.
+
+        Pour chaque interface :
+        - Configure l'adresse IP et le masque.
+        - Ajoute des paramètres spécifiques comme OSPF, MPLS ou duplex.
+        """
+        super().generate_interfaces()
+        self.file += self.loopback
+        for interface, config in self.interfaces.items():
+            if self.subnets[self.router_name][interface]["linkType"] == "BGP":
+                if self.subnets[[self.router_name][interface]["neighbor"]]["FastEthernet0/0"]["AS_number"] != self.subnets[self.router_name][interface]["AS_number"]:
+                    self.file += f" ip vrf forwarding {self.subnets[[self.router_name][interface]["neighbor"]]["FastEthernet0/0"]["vrf_name"]}\n"
+            self.file += "!\n" + config
+            if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
+                self.file += " mpls ip\n"
+
+
+
+
+    def generate_vrf(self):
+        d
+
+    def generate_routing_file(self) -> str:
+        self.generate_init_config()
+        self.generate_interfaces()
+        self.generate_igp()
+        self.generate_bgp()
+        self.generate_finale_config()
+        return self.file
+
+
+
