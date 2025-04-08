@@ -1,6 +1,6 @@
 # Projet NAS - Network Automation System
 
-![GNS3 Main Screen](images/GNS3_main_screen_v3.png)
+![GNS3 Main Screen](images/GNS3_main_screen_v4.png)
 
 ## Description
 
