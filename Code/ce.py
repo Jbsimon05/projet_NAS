@@ -39,16 +39,21 @@ class CE(Router):
         """
         Génère la configuration BGP pour le routeur CE.
         """
-        as_number = self.subnets[self.router_name]["FastEthernet0/0"]["AS_number"]
-        neighbor_ip = self.subnets[self.router_name]["FastEthernet0/0"]["ip"]
+        for keys in list(self.subnets[self.router_name].keys()):
+            if keys[0][0] in "GF": 
+                as_number = self.subnets[self.router_name][keys]["AS_number"]
 
-        self.file += f"router bgp {as_number}\n"
-        self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
-        self.file += " bgp log-neighbor-changes\n"
-        self.file += f" neighbor {neighbor_ip} remote-as {as_number}\n"
-        self.file += " !\n"
-        self.file += " address-family ipv4\n"
-        self.file += "  redistribute connected\n"
-        self.file += f"  neighbor {neighbor_ip} activate\n"
-        self.file += f"  neighbor {neighbor_ip} allowas-in 2\n"
-        self.file += " exit-address-family\n"
+                neighbor_ip = self.subnets[self.router_name][keys]["ip"]
+
+                self.file += f"router bgp {as_number}\n"
+                self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
+                self.file += " bgp log-neighbor-changes\n"
+                self.file += f" neighbor {neighbor_ip} remote-as {as_number}\n"
+                self.file += " !\n"
+                self.file += " address-family ipv4\n"
+                self.file += "  redistribute connected\n"
+                self.file += f"  neighbor {neighbor_ip} activate\n"
+                self.file += f"  neighbor {neighbor_ip} allowas-in 2\n"
+                self.file += " exit-address-family\n"
+
+                break
