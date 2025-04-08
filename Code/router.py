@@ -43,7 +43,7 @@ class Router:
         """
         
         self.loopback = f"interface loopback0\n"
-        self.loopback += f" ip address {self.subnets[self.router_name]["loopback"]} {get_subnet(self.subnets[self.router_name]['loopback'])}\n"
+        self.loopback += f" ip address {self.subnets[self.router_name]["loopback"][:-2]} {get_subnet(self.subnets[self.router_name]['loopback'])}\n"
 
         self.interfaces = {}
         for interface, specs in self.subnets[self.router_name].items():
