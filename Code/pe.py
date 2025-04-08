@@ -125,7 +125,7 @@ class PE(Router):
             if (CE[0] == "C") and (CE[1] == "E"):
                 for keys in list(self.subnets[CE].keys()):
                     if keys[0][0] in "GF":
-                        for keys2 in list(self.sunbets[router_name].keys()):
+                        for keys2 in list(self.subnets[self.router_name].keys()):
                             if keys2[0][0] in "GF":
 
                                 self.file += "ip vrf {}\n".format(
