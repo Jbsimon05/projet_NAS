@@ -43,7 +43,7 @@ class PE(Router):
         self.file += " !\n"
         self.file += " address-family vpnv4\n"	
         for neighbor in self.intent["Backbone"]["routers"]:
-            if (neighbors != self.router_name) and (neighbors[0] == "P") and (neighbors[0] == "E"):
+            if (neighbors != self.router_name) and (neighbors[0] == "P") and (neighbors[1] == "E"):
                 self.file += "  neighbor {} activate\n".format(
                     self.subnets[neighbors]["loopback"], #loopback
                 )
@@ -117,10 +117,33 @@ class PE(Router):
 
 
     def generate_vrf(self):
-        d
+        for CE in self.intent["Backbone"]["routers"][self.router_name]:
+            if (CE[0] == "C") and (CE[1] == "E"):
+                self.file += "ip vrf {}\n".format(
+                    self.subnets[CE][list(self.subnets[CE].keys())[0]]["vrf_name"] # creer cette fonction
+                )
+                self.file += " rd {}:{}\n".format(
+                    self.subnets[self.router_name][list(self.subnets[self.router_name].keys())[0]]["AS_number"],
+                    self.subnets[CE][list(self.subnets[CE].keys())[0]]["AS_number"] # creer cette fonction
+                )
+                self.file += " route-target export {}:{}\n".format(
+                    self.subnets[self.router_name][list(self.subnets[self.router_name].keys())[0]]["AS_number"],
+                    self.subnets[CE][list(self.subnets[CE].keys())[0]]["AS_number"] # creer cette fonction
+                )
+                self.file += " route-target import {}:{}\n".format(
+                    self.subnets[self.router_name][list(self.subnets[self.router_name].keys())[0]]["AS_number"],
+                    self.subnets[CE][list(self.subnets[CE].keys())[0]]["AS_number"] # creer cette fonction
+                )
+                self.file += "!\n"
+
+
+
+
+        
 
     def generate_routing_file(self) -> str:
         self.generate_init_config()
+        self.generate_vrf()
         self.generate_interfaces()
         self.generate_igp()
         self.generate_bgp()
