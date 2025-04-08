@@ -133,7 +133,7 @@ def main():
     # Test de la fonction get_reversed_mask
     print("\nTest de get_reversed_mask :")
     try:
-        reversed_mask = get_reversed_mask("192.168.2.1/30")
+        reversed_mask = get_subnet_mask("192.168.2.1/30")
         print(f"get_reversed_mask a renvoyé : {reversed_mask}")
     except Exception as e:
         print(f"Erreur dans get_reversed_mask : {e}")
