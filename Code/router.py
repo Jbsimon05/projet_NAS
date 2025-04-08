@@ -28,6 +28,11 @@ class Router:
         """
         self.file += INIT_CONFIG(self.router_name)
         self.file += "!\n"
+        
+    def generate_init_config2(self, isMpls: bool):
+        self.file += INIT_CONFIG2(isMpls)
+        self.file += "!\n"
+        
 
     def generate_interfaces(self):
         """
@@ -43,7 +48,7 @@ class Router:
         """
         
         self.loopback = f"interface loopback0\n"
-        self.loopback += f" ip address {self.loopback} {get_subnet(self.subnets[self.router_name]['loopback'])}\n"
+        self.loopback += f" ip address {self.subnets[self.router_name]["loopback"][:-2]} {get_subnet(self.subnets[self.router_name]['loopback'])}\n"
 
         self.interfaces = {}
         for interface, specs in self.subnets[self.router_name].items():

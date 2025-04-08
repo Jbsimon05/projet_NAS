@@ -155,31 +155,5 @@
             }
         },
         "protocol": "OSPF"
-    },
-    "Router1": {
-        "loopback": {
-            "ip": "192.168.1.1"
-        },
-        "FastEthernet0/0": {
-            "ip": "192.168.1.20",
-            "ospf_cost": 10
-        },
-        "FastEthernet0/1": {
-            "ip": "192.168.1.21",
-            "ospf_cost": 20
-        }
-    },
-    "Router2": {
-        "loopback": {
-            "ip": "192.168.2.1"
-        },
-        "FastEthernet0/0": {
-            "ip": "192.168.2.20",
-            "ospf_cost": 15
-        },
-        "FastEthernet0/1": {
-            "ip": "192.168.2.21",
-            "ospf_cost": 25
-        }
     }
 }

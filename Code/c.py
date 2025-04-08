@@ -46,6 +46,7 @@ class C(Router):
             str: Le fichier de configuration complet sous forme de chaîne de caractères.
         """
         super().generate_init_config()
+        super().generate_init_config2(False)
         self.generate_interfaces()
         super().generate_ospf()
         super().generate_finale_config()

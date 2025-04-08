@@ -32,15 +32,8 @@ def find_index(filename, line: str) -> int:
         lines = file.readlines()
     return lines.index(line)
 
-"""
 def get_subnet(ip_with_suffix: str) -> str:
-    Calcule le sous-réseau correspondant à une adresse IP avec suffixe CIDR.
-    
-    Args:
-        ip_with_suffix (str): Une adresse IP avec suffixe (exemple : "192.168.2.1/24").
-    
-    Returns:
-        str: L'adresse du sous-réseau au format IPv4.
+
     ip_part, suffix = ip_with_suffix.split('/')
     suffix = int(suffix)
     ip_octets = list(map(int, ip_part.split('.')))
@@ -58,7 +51,6 @@ def get_subnet(ip_with_suffix: str) -> str:
     # Reconvertir en format IPv4
     subnet_ip = '.'.join(str((subnet_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
     return subnet_ip
-"""
 
 def get_mask(bits_to_clear: str) -> str:
     """
