@@ -1,4 +1,5 @@
 INIT_CONFIG = lambda router_name : f"""\
+enable
 version 15.2
 service timestamps debug datetime msec
 service timestamps log datetime msec
