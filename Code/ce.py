@@ -1,5 +1,5 @@
 from router import Router
-from tools import get_subnet, get_mask, get_reversed_mask
+from tools import *
 
 class CE(Router):
     """
@@ -26,16 +26,14 @@ class CE(Router):
         """
         Génère la configuration des interfaces pour le routeur CE.
         """
+        super().generate_interfaces()
+        self.file += self.loopback
+        for interface, config in self.interfaces.items():
+            self.file += "!\n" + config
+            if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
+                self.file += " mpls ip\n"
         self.file += f"interface Loopback0\n"
         self.file += f" ip address {self.subnets[self.router_name]['loopback']}\n!\n"
-
-        for interface, specs in self.subnets[self.router_name].items():
-            if interface != "loopback":
-                self.file += f"interface {interface}\n"
-                self.file += f" ip address {specs['ip']} {get_mask(specs['ip'])}\n"
-                if "FastEthernet" in interface:
-                    self.file += " duplex full\n"
-                self.file += " negotiation auto\n!\n"
 
     def generate_bgp(self):
         """
