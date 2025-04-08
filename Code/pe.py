@@ -108,7 +108,7 @@ class PE(Router):
                 for keys in list(self.subnets[neighbor].keys()):
                     if keys[0][0] in "GF": 
                         self.file += f" ip vrf forwarding {self.subnets[neighbor][keys[0][0]]["vrf_name"]}\n"
-                    break
+                        break
             self.file += "!\n" + config
             if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
                 self.file += " mpls ip\n"
