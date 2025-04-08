@@ -28,6 +28,11 @@ class Router:
         """
         self.file += INIT_CONFIG(self.router_name)
         self.file += "!\n"
+        
+    def generate_init_config2(self, isMpls: bool):
+        self.file += INIT_CONFIG2(isMpls)
+        self.file += "!\n"
+        
 
     def generate_interfaces(self):
         """

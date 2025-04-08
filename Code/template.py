@@ -8,12 +8,14 @@ boot-end-marker
 no aaa new-model
 no ip icmp rate-limit unreachable
 ip cef
+"""
+
+INIT_CONFIG2 = lambda isMpls : f"""\
 no ip domain lookup
 mpls label protocol ldp
 no ipv6 cef
-multilink bundle-name authenticated
-ip tcp synwait-time 5
-"""
+{"multilink bundle-name authenticated" if isMpls else "!"}
+ip tcp synwait-time 5"""
 
 FINAL_CONFIG = """\
 ip forward-protocol nd
