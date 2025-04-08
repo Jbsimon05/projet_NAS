@@ -36,8 +36,7 @@ def edit_config(directories: list[Path], data: dict, subnets: dict) -> None:
                 router_name = get_router_name(content)
 
                 if router_name[:2] == "PE":
-                    ...
-                    #router = PE(router_name, data, subnets)
+                    router = PE(router_name, data, subnets)
                 elif router_name[:2] == "CE":
                     router = CE(router_name, data, subnets)
                 elif router_name[0] == "P":
