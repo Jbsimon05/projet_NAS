@@ -47,11 +47,13 @@ class Router:
 
         self.interfaces = {}
         for interface, specs in self.subnets[self.router_name].items():
-            if interface != "loopback":
-                self.interfaces[interface] = f" interface {interface}\n"
-                self.interfaces[interface] += f" ip address {get_subnet(specs['ip'])} {get_mask(specs['ip'])}\n"
-                if interface == "FastEthernet0/0" : self.interfaces[interface] += " duplex full\n"
-                self.interfaces[interface] += " negociate auto\n"
+            if interface != "ospf_cost" :
+                if interface != "loopback":
+                    self.interfaces[interface] = f" interface {interface}\n"
+                    self.interfaces[interface] += f" ip address {get_subnet(specs['ip'])} {get_mask(specs['ip'])}\n"
+                    if interface == "FastEthernet0/0" : self.interfaces[interface] += " duplex full\n"
+                    self.interfaces[interface] += " negociate auto\n"
+                    self.interfaces[interface] += f" ip ospf cost {specs['ospf_cost']}\n"
 
     def generate_ospf(self):
         """
@@ -74,7 +76,7 @@ class Router:
                     get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
                 )
         ### @todo: faut rajouter ça ou pas ?
-        # self.file += f" maximum-paths {self.max_path}\n"
+        self.file += f" maximum-paths {self.max_path}\n"
 
 
     ### TODO il faut supprimer cette méthode car uniquement sur PE 

@@ -5,9 +5,12 @@ from subnets import SubnetsGen
 from router import Router
 from c import C
 from p import P
-from pe import PE
+# from pe import PE
 from ce import CE
 from tools import get_router_name
+
+
+
 
 with open('intent.json', 'r') as file:
     data = json.load(file)
@@ -51,6 +54,7 @@ def edit_config(directories: list[Path], data: dict, subnets: dict) -> None:
                 with open(item, 'w') as file:
                     file.write(new_content)
 
+
 def edit_config_test(data: dict, subnets: dict):
     """
     Fonction principale pour générer les fichiers de configuration des routeurs.
@@ -64,9 +68,10 @@ def edit_config_test(data: dict, subnets: dict):
     """
     # Générer les fichiers de configuration pour chaque routeur
     for router_name in subnets:
-        if router_name[:2] == "PE":
-            router = PE(router_name, data, subnets)
-        elif router_name[:2] == "CE":
+        # if router_name[:2] == "PE":
+        #     router = PE(router_name, data, subnets)
+        # el
+        if router_name[:2] == "CE":
             router = CE(router_name, data, subnets)
         elif router_name[0] == "P":
             router = P(router_name, data, subnets)
@@ -78,6 +83,9 @@ def edit_config_test(data: dict, subnets: dict):
         config_filename = f"{router_name}.cfg"
         with open("../testConfigFiles/" + config_filename, "w") as config_file:
             config_file.write(new_content)
+
+
+
 
 if __name__ == "__main__":
     start = time.time()
