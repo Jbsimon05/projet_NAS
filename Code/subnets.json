@@ -28,13 +28,7 @@
             "vrf_name": "Backbone",
             "linkType": "BGP"
         },
-        "10": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.1/30",
-            "AS_number": "65000",
-            "vrf_name": "Backbone",
-            "linkType": "OSPF"
-        },
+        "10": "192.168.100.1/32",
         "loopback": "192.168.100.1/32"
     },
     "P1": {
@@ -59,13 +53,7 @@
             "vrf_name": "Backbone",
             "linkType": "OSPF"
         },
-        "15": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.17/30",
-            "AS_number": "65000",
-            "vrf_name": "Backbone",
-            "linkType": "OSPF"
-        },
+        "15": "192.168.100.2/32",
         "loopback": "192.168.100.2/32"
     },
     "P2": {
@@ -83,13 +71,7 @@
             "vrf_name": "Backbone",
             "linkType": "OSPF"
         },
-        "20": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.25/30",
-            "AS_number": "65000",
-            "vrf_name": "Backbone",
-            "linkType": "OSPF"
-        },
+        "20": "192.168.100.3/32",
         "loopback": "192.168.100.3/32"
     },
     "P3": {
@@ -114,13 +96,7 @@
             "vrf_name": "Backbone",
             "linkType": "OSPF"
         },
-        "25": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.37/30",
-            "AS_number": "65000",
-            "vrf_name": "Backbone",
-            "linkType": "OSPF"
-        },
+        "25": "192.168.100.4/32",
         "loopback": "192.168.100.4/32"
     },
     "P4": {
@@ -145,13 +121,7 @@
             "vrf_name": "Backbone",
             "linkType": "OSPF"
         },
-        "30": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.45/30",
-            "AS_number": "65000",
-            "vrf_name": "Backbone",
-            "linkType": "OSPF"
-        },
+        "30": "192.168.100.5/32",
         "loopback": "192.168.100.5/32"
     },
     "PE2": {
@@ -183,13 +153,7 @@
             "vrf_name": "Backbone",
             "linkType": "BGP"
         },
-        "10": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.49/30",
-            "AS_number": "65000",
-            "vrf_name": "Backbone",
-            "linkType": "OSPF"
-        },
+        "10": "192.168.100.6/32",
         "loopback": "192.168.100.6/32"
     },
     "PE3": {
@@ -221,13 +185,7 @@
             "vrf_name": "Backbone",
             "linkType": "BGP"
         },
-        "10": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.53/30",
-            "AS_number": "65000",
-            "vrf_name": "Backbone",
-            "linkType": "OSPF"
-        },
+        "10": "192.168.100.7/32",
         "loopback": "192.168.100.7/32"
     },
     "CE-R1": {
@@ -245,13 +203,7 @@
             "vrf_name": "Red",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.5/30",
-            "AS_number": "65001",
-            "vrf_name": "Red",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.8/32",
         "loopback": "192.168.100.8/32"
     },
     "CE-R2": {
@@ -269,13 +221,7 @@
             "vrf_name": "Red",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.13/30",
-            "AS_number": "65001",
-            "vrf_name": "Red",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.9/32",
         "loopback": "192.168.100.9/32"
     },
     "CE-R3": {
@@ -293,13 +239,7 @@
             "vrf_name": "Red",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.21/30",
-            "AS_number": "65001",
-            "vrf_name": "Red",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.10/32",
         "loopback": "192.168.100.10/32"
     },
     "C-R1": {
@@ -310,13 +250,7 @@
             "vrf_name": "Red",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.29/30",
-            "AS_number": "65001",
-            "vrf_name": "Red",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.11/32",
         "loopback": "192.168.100.11/32"
     },
     "C-R2": {
@@ -327,13 +261,7 @@
             "vrf_name": "Red",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.37/30",
-            "AS_number": "65001",
-            "vrf_name": "Red",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.12/32",
         "loopback": "192.168.100.12/32"
     },
     "C-R3": {
@@ -344,13 +272,7 @@
             "vrf_name": "Red",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.45/30",
-            "AS_number": "65001",
-            "vrf_name": "Red",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.13/32",
         "loopback": "192.168.100.13/32"
     },
     "CE-G1": {
@@ -368,13 +290,7 @@
             "vrf_name": "Green",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.5/30",
-            "AS_number": "65002",
-            "vrf_name": "Green",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.14/32",
         "loopback": "192.168.100.14/32"
     },
     "CE-G2": {
@@ -392,13 +308,7 @@
             "vrf_name": "Green",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.13/30",
-            "AS_number": "65002",
-            "vrf_name": "Green",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.15/32",
         "loopback": "192.168.100.15/32"
     },
     "CE-G3": {
@@ -416,13 +326,7 @@
             "vrf_name": "Green",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.21/30",
-            "AS_number": "65002",
-            "vrf_name": "Green",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.16/32",
         "loopback": "192.168.100.16/32"
     },
     "C-G1": {
@@ -433,13 +337,7 @@
             "vrf_name": "Green",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.29/30",
-            "AS_number": "65002",
-            "vrf_name": "Green",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.17/32",
         "loopback": "192.168.100.17/32"
     },
     "C-G2": {
@@ -450,13 +348,7 @@
             "vrf_name": "Green",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.37/30",
-            "AS_number": "65002",
-            "vrf_name": "Green",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.18/32",
         "loopback": "192.168.100.18/32"
     },
     "C-G3": {
@@ -467,13 +359,7 @@
             "vrf_name": "Green",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.45/30",
-            "AS_number": "65002",
-            "vrf_name": "Green",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.19/32",
         "loopback": "192.168.100.19/32"
     },
     "CE-B1": {
@@ -491,13 +377,7 @@
             "vrf_name": "Blue",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.5/30",
-            "AS_number": "65003",
-            "vrf_name": "Blue",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.20/32",
         "loopback": "192.168.100.20/32"
     },
     "CE-B2": {
@@ -515,13 +395,7 @@
             "vrf_name": "Blue",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.13/30",
-            "AS_number": "65003",
-            "vrf_name": "Blue",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.21/32",
         "loopback": "192.168.100.21/32"
     },
     "CE-B3": {
@@ -539,13 +413,7 @@
             "vrf_name": "Blue",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.21/30",
-            "AS_number": "65003",
-            "vrf_name": "Blue",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.22/32",
         "loopback": "192.168.100.22/32"
     },
     "C-B1": {
@@ -556,13 +424,7 @@
             "vrf_name": "Blue",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.29/30",
-            "AS_number": "65003",
-            "vrf_name": "Blue",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.23/32",
         "loopback": "192.168.100.23/32"
     },
     "C-B2": {
@@ -573,13 +435,7 @@
             "vrf_name": "Blue",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.37/30",
-            "AS_number": "65003",
-            "vrf_name": "Blue",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.24/32",
         "loopback": "192.168.100.24/32"
     },
     "C-B3": {
@@ -590,13 +446,7 @@
             "vrf_name": "Blue",
             "linkType": "OSPF"
         },
-        "5": {
-            "neighbor": "ospf_cost",
-            "ip": "192.168.1.45/30",
-            "AS_number": "65003",
-            "vrf_name": "Blue",
-            "linkType": "OSPF"
-        },
+        "5": "192.168.100.25/32",
         "loopback": "192.168.100.25/32"
     }
 }

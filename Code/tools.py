@@ -32,65 +32,47 @@ def find_index(filename, line: str) -> int:
         lines = file.readlines()
     return lines.index(line)
 
-def get_subnet(ip_with_suffix: str) -> str:
 
-    ip_part, suffix = ip_with_suffix.split('/')
-    suffix = int(suffix)
-    ip_octets = list(map(int, ip_part.split('.')))
+import ipaddress
 
-    # Convertir l'adresse IP en entier 32 bits
-    ip_int = (ip_octets[0] << 24) | (ip_octets[1] << 16) | (ip_octets[2] << 8) | ip_octets[3]
-
-    # Calcul du nombre de bits à mettre à 0 (log2 de la valeur du suffixe)
-    zero_bits = int(math.log2(suffix))
-    mask = ~((1 << zero_bits) - 1) & 0xFFFFFFFF
-
-    # Appliquer le masque
-    subnet_int = ip_int & mask
-
-    # Reconvertir en format IPv4
-    subnet_ip = '.'.join(str((subnet_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
-    return subnet_ip
-
-def get_mask(bits_to_clear: str) -> str:
+def extract_ip_address(cidr_notation: str) -> str:
     """
-    Génère un masque de sous-réseau personnalisé où les `bits_to_clear` bits les plus à droite sont à 0.
-    
+    Extracts the IP address from a CIDR notation string.
+
     Args:
-        bits_to_clear (str): Nombre de bits à mettre à 0 (exemple : "192.168.2.1/24" ou "24").
-    
-    Returns:
-        str: Le masque de sous-réseau au format IPv4.
-    """
-    bits_to_clear = int(bits_to_clear.split('/')[1]) if '/' in bits_to_clear else bits_to_clear
-    if not (0 <= bits_to_clear <= 32):
-        raise ValueError("bits_to_clear must be between 0 and 32")
-    
-    one_bits = 32 - bits_to_clear
-    mask = (0xFFFFFFFF >> (32 - one_bits)) << (32 - one_bits)
-    
-    return '.'.join(str((mask >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+        cidr_notation (str): The IP address in CIDR notation (e.g., '192.168.1.1/24').
 
-def get_reversed_mask(bits_to_clear: str) -> str:
-    """
-    Génère l'inverse bit à bit d'un masque de sous-réseau.
-    
-    Args:
-        bits_to_clear (str): Nombre de bits à mettre à 0 (exemple : "192.168.2.1/24" ou "24").
-    
     Returns:
-        str: Le masque inversé au format IPv4.
+        str: The extracted IP address (e.g., '192.168.1.1').
     """
-    # Call get_mask and parse the result
-    mask_str = get_mask(bits_to_clear)
-    mask_parts = [int(part) for part in mask_str.split('.')]
-    
-    # Convert to 32-bit integer
-    mask_int = sum(part << (8 * (3 - i)) for i, part in enumerate(mask_parts))
-    
-    # Invert and convert back to dotted decimal
-    reversed_int = ~mask_int & 0xFFFFFFFF
-    return '.'.join(str((reversed_int >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+    return str(ipaddress.ip_interface(cidr_notation).ip)
+
+def get_subnet_mask(cidr_notation: str) -> str:
+    """
+    Retrieves the subnet mask from a CIDR notation string.
+
+    Args:
+        cidr_notation (str): The IP address in CIDR notation (e.g., '192.168.1.1/24').
+
+    Returns:
+        str: The subnet mask corresponding to the CIDR prefix length (e.g., '255.255.255.0').
+    """
+    return str(ipaddress.ip_network(cidr_notation, strict=False).netmask)
+
+def get_wildcard_mask(cidr_notation: str) -> str:
+    """
+    Computes the wildcard mask, which is the bitwise inverse of the subnet mask, from a CIDR notation string.
+
+    Args:
+        cidr_notation (str): The IP address in CIDR notation (e.g., '192.168.1.1/24').
+
+    Returns:
+        str: The wildcard mask (e.g., '0.0.0.255').
+    """
+    subnet_mask = get_subnet_mask(cidr_notation)
+    # Convert subnet mask to binary, invert bits, and convert back to dotted decimal format
+    wildcard_mask = '.'.join(str(255 - int(octet)) for octet in subnet_mask.split('.'))
+    return wildcard_mask
 
 def get_router_name(config: str) -> str:
     """
@@ -151,7 +133,7 @@ def main():
     # Test de la fonction get_reversed_mask
     print("\nTest de get_reversed_mask :")
     try:
-        reversed_mask = get_reversed_mask("192.168.2.1/30")
+        reversed_mask = get_subnet_mask("192.168.2.1/30")
         print(f"get_reversed_mask a renvoyé : {reversed_mask}")
     except Exception as e:
         print(f"Erreur dans get_reversed_mask : {e}")

@@ -168,15 +168,6 @@ class SubnetsGen:
                         }
                     else:
                         self.subnets[router][interface] = self.loopback_interfaces[router]
-    def save_to_json(self, filename: str = "subnets.json") -> None:
-        """
-        Sauvegarde la configuration des sous-réseaux dans un fichier JSON.
-
-        Args:
-            filename (str): Le nom du fichier JSON. Par défaut 'subnets.json'.
-        """
-        with open(filename, "w") as json_file:
-            json.dump(self.subnets, json_file, indent=4)
 
 def main():
     """
@@ -184,7 +175,7 @@ def main():
     """
     # Load the intent from intends.json
     intent_file = "intent.json"
-    with open("intent.json", "r") as file:
+    with open(intent_file, "r") as file:
         intent = json.load(file)
 
     # Generate subnets.json using SubnetsGen
@@ -195,10 +186,6 @@ def main():
     config_filename = "subnets.json"
     with open(config_filename, "w") as config_file:
         json.dump(subnets, config_file, indent=4)
-    
-    #old test
-    # intent_file = get_intent("intends.json")
-    # sub = SubnetsGen(intent_file)
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 from template import *
-from tools import insert_line, find_index, get_mask, get_subnet, get_reversed_mask
+from tools import *
 
 class Router:
     """
@@ -48,17 +48,17 @@ class Router:
         """
         
         self.loopback = f"interface loopback0\n"
-        self.loopback += f" ip address {self.subnets[self.router_name]["loopback"][:-2]} {get_subnet(self.subnets[self.router_name]['loopback'])}\n"
+        self.loopback += f" ip address {extract_ip_address(self.subnets[self.router_name]['loopback'])} {get_subnet_mask(self.subnets[self.router_name]['loopback'])}\n"
 
         self.interfaces = {}
         for interface, specs in self.subnets[self.router_name].items():
             if interface != "ospf_cost" :
                 if interface != "loopback":
                     self.interfaces[interface] = f" interface {interface}\n"
-                    self.interfaces[interface] += f" ip address {get_subnet(specs['ip'])} {get_mask(specs['ip'])}\n"
+                    self.interfaces[interface] += f" ip address {extract_ip_address(specs['ip'])} {get_subnet_mask(specs['ip'])}\n"
                     if interface == "FastEthernet0/0" : self.interfaces[interface] += " duplex full\n"
                     self.interfaces[interface] += " negociate auto\n"
-                    self.interfaces[interface] += f" ip ospf cost {specs['ospf_cost']}\n"
+                    #self.interfaces[interface] += f" ip ospf cost {specs['ospf_cost']}\n"
 
     def generate_ospf(self):
         """
@@ -72,13 +72,13 @@ class Router:
         for interface in self.subnets[self.router_name].keys():
             if interface == "loopback":
                 self.file += " network {} {} area 0\n".format(
-                    get_subnet(self.subnets[self.router_name]["loopback"]),
-                    get_reversed_mask(self.subnets[self.router_name]["loopback"])
+                    get_subnet_mask(self.subnets[self.router_name]["loopback"]),
+                    get_wildcard_mask(self.subnets[self.router_name]["loopback"])
                 )
             else: 
                 self.file += " network {} {} area 0\n".format(
                     get_subnet(self.subnets[self.router_name][interface]["ip"]),
-                    get_reversed_mask(self.subnets[self.router_name][interface]["ip"])
+                    get_wildcard_mask(self.subnets[self.router_name][interface]["ip"])
                 )
         ### @todo: faut rajouter ça ou pas ?
         self.file += f" maximum-paths {self.max_path}\n"
@@ -108,14 +108,16 @@ class Router:
         ### self.bgp_neighbors = [ router for router in self.intent[self.router_name].keys() if router != "loopback" ]
         
 
-    def generate_finale_config(self):
+    def generate_finale_config(self, isMpls: bool = False):
         """
         Ajoute la configuration finale au fichier de configuration.
 
         Cette méthode complète le fichier de configuration avec les paramètres
         finaux nécessaires pour le routeur.
         """
-        self.file += FINAL_CONFIG
+        self.file += FINAL_CONFIG(isMpls)
+        self.file += "!\n"
+
 
     ### TODO : a supprimer à terme 
     # def generate_routing_file(self):

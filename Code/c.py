@@ -1,7 +1,6 @@
 from router import Router
 from template import *
-from tools import insert_line, find_index, get_mask, get_subnet, get_reversed_mask
-
+from tools import *
 
 class C(Router):
     """
@@ -49,5 +48,5 @@ class C(Router):
         super().generate_init_config2(False)
         self.generate_interfaces()
         super().generate_ospf()
-        super().generate_finale_config()
+        super().generate_finale_config(False)
         return self.file

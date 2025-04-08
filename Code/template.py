@@ -17,14 +17,14 @@ no ipv6 cef
 {"multilink bundle-name authenticated" if isMpls else "!"}
 ip tcp synwait-time 5"""
 
-FINAL_CONFIG = """\
+FINAL_CONFIG = lambda isMpls : f"""\
 ip forward-protocol nd
 no ip http server
 no ip http secure-server
 control-plane
 line con 0
  exec-timeout 0 0
-mpls ip
+{"mpls ip" if isMpls else "!"}
  privilege level 15
  logging synchronous
  stopbits 1
