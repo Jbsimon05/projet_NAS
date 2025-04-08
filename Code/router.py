@@ -70,8 +70,8 @@ class Router:
         self.file += "router ospf 1\n"
 
         for interface in self.subnets[self.router_name].keys():
-            if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
-                if interface == "loopback":
+            if interface != "loopback":
+                if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
                     self.file += " network {} {} area 0\n".format(
                         get_subnet_mask(self.subnets[self.router_name]["loopback"]),
                         get_wildcard_mask(self.subnets[self.router_name]["loopback"])

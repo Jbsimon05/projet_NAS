@@ -65,8 +65,7 @@ def edit_config_test(data: dict, subnets: dict):
     # Générer les fichiers de configuration pour chaque routeur
     for router_name in subnets:
         if router_name[:2] == "PE":
-            ...
-            #router = PE(router_name, data, subnets)
+            router = PE(router_name, data, subnets)
         if router_name[:2] == "CE":
             router = CE(router_name, data, subnets)
         elif router_name[0] == "P":

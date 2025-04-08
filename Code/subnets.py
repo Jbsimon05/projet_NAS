@@ -78,7 +78,6 @@ class SubnetsGen:
                     if not (router, neighbor) in self.subnet_dict[AS].keys() and not (neighbor, router) in self.subnet_dict[AS].keys():
                         self.subnet_dict[AS][(router, neighbor)] = subnet_number
                         subnet_number += 1
-        print(self.subnet_dict)
 
     def last_entries_subnet(self) -> None:
         """
@@ -160,7 +159,6 @@ class SubnetsGen:
                             subnet_index = self.subnet_dict[AS][(neighbor, router)]
                             router_index = 2
                         ipv4_address = add_ip(self.all_subnets[subnet_index - 1], router_index)
-                        print(ipv4_address)
                         self.subnets[router][interface["link"]] = {
                             "neighbor": neighbor, 
                             "ip" : ipv4_address, 

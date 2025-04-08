@@ -17,6 +17,7 @@ class CE(Router):
             str: Le fichier de configuration complet sous forme de chaîne de caractères.
         """
         self.generate_init_config()
+        self.generate_init_config2(False)
         self.generate_interfaces()
         self.generate_bgp()
         self.generate_finale_config()
@@ -39,21 +40,30 @@ class CE(Router):
         """
         Génère la configuration BGP pour le routeur CE.
         """
+        as_number = None
         for keys in list(self.subnets[self.router_name].keys()):
             if keys[0][0] in "GF": 
                 as_number = self.subnets[self.router_name][keys]["AS_number"]
+            break
 
-                neighbor_ip = self.subnets[self.router_name][keys]["ip"]
+        link = None
+        neighbor = None
+        for interface in self.subnets[self.router_name]:
+            if interface != "loopback":
+                if self.subnets[self.router_name][interface]["neighbor"][:2] == "PE":
+                    neighbor = self.subnets[self.router_name][interface]["neighbor"]
+                    link = interface
 
-                self.file += f"router bgp {as_number}\n"
-                self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
-                self.file += " bgp log-neighbor-changes\n"
-                self.file += f" neighbor {neighbor_ip} remote-as {as_number}\n"
-                self.file += " !\n"
-                self.file += " address-family ipv4\n"
-                self.file += "  redistribute connected\n"
-                self.file += f"  neighbor {neighbor_ip} activate\n"
-                self.file += f"  neighbor {neighbor_ip} allowas-in 2\n"
-                self.file += " exit-address-family\n"
+        neighbor_ip = self.subnets[neighbor][link]["ip"]
 
-                break
+        self.file += f"router bgp {as_number}\n"
+        self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
+        self.file += " bgp log-neighbor-changes\n"
+        self.file += f" neighbor {neighbor_ip} remote-as {as_number}\n"
+        self.file += " !\n"
+        self.file += " address-family ipv4\n"
+        self.file += "  redistribute connected\n"
+        self.file += f"  neighbor {neighbor_ip} activate\n"
+        self.file += f"  neighbor {neighbor_ip} allowas-in 2\n"
+        self.file += " exit-address-family\n"
+
