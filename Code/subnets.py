@@ -75,9 +75,10 @@ class SubnetsGen:
                 # Iterate over each neighbor of the current router
                 for neighbor in self.intent[AS]['routers'][router]:
                     # To avoid duplicates, ensure the router with the smaller numeric suffix comes first
-                    if router[1:] < neighbor[1:]:
+                    if not (router, neighbor) in self.subnet_dict[AS].keys() and not (neighbor, router) in self.subnet_dict[AS].keys():
                         self.subnet_dict[AS][(router, neighbor)] = subnet_number
                         subnet_number += 1
+        print(self.subnet_dict)
 
     def last_entries_subnet(self) -> None:
         """
@@ -152,15 +153,14 @@ class SubnetsGen:
                 for neighbor, interface in {**self.intent[AS]['routers'][router], "loopback": "loopback"}.items():
                     if neighbor != "loopback":
                         # To ensure it's in the correct order
-                        if router[1:] < neighbor[1:]:
+                        if self.subnet_dict[AS].get((router, neighbor)):
                             subnet_index = self.subnet_dict[AS][(router, neighbor)]
                             router_index = 1
                         elif self.subnet_dict[AS].get((neighbor, router)):
                             subnet_index = self.subnet_dict[AS][(neighbor, router)]
                             router_index = 2
                         ipv4_address = add_ip(self.all_subnets[subnet_index - 1], router_index)
-                        print(self.subnet_dict)
-                        print(router, interface["link"], ipv4_address)
+                        print(ipv4_address)
                         self.subnets[router][interface["link"]] = {
                             "neighbor": neighbor, 
                             "ip" : ipv4_address, 
