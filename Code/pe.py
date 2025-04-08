@@ -153,6 +153,7 @@ class PE(Router):
     def generate_routing_file(self) -> str:
         self.generate_init_config()
         self.generate_vrf()
+        self.generate_init_config2(True)
         self.generate_interfaces()
         self.generate_ospf()
         self.generate_bgp()
