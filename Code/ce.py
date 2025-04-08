@@ -42,9 +42,8 @@ class CE(Router):
         """
         as_number = None
         for keys in list(self.subnets[self.router_name].keys()):
-            if keys[0][0] in "GF": 
+            if keys[0][0] in "GF" and not as_number:
                 as_number = self.subnets[self.router_name][keys]["AS_number"]
-                break
 
         link = None
         neighbor = None
