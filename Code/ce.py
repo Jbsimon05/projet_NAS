@@ -44,7 +44,7 @@ class CE(Router):
         for keys in list(self.subnets[self.router_name].keys()):
             if keys[0][0] in "GF": 
                 as_number = self.subnets[self.router_name][keys]["AS_number"]
-            break
+                break
 
         link = None
         neighbor = None
@@ -63,7 +63,7 @@ class CE(Router):
         self.file += " !\n"
         self.file += " address-family ipv4\n"
         self.file += "  redistribute connected\n"
-        self.file += f"  neighbor {neighbor_ip} activate\n"
-        self.file += f"  neighbor {neighbor_ip} allowas-in 2\n"
+        self.file += f"  neighbor {extract_ip_address(neighbor_ip)} activate\n"
+        self.file += f"  neighbor {extract_ip_address(neighbor_ip)} allowas-in 2\n"
         self.file += " exit-address-family\n"
 
