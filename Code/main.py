@@ -5,7 +5,7 @@ from subnets import SubnetsGen
 from router import Router
 from c import C
 from p import P
-# from pe import PE
+from pe import PE
 from ce import CE
 from tools import get_router_name
 
@@ -63,10 +63,9 @@ def edit_config_test(data: dict, subnets: dict):
     """
     # Générer les fichiers de configuration pour chaque routeur
     for router_name in subnets:
-        # if router_name[:2] == "PE":
-        #     router = PE(router_name, data, subnets)
-        # el
-        if router_name[:2] == "CE":
+        if router_name[:2] == "PE":
+            router = PE(router_name, data, subnets)
+        elif router_name[:2] == "CE":
             router = CE(router_name, data, subnets)
         elif router_name[0] == "P":
             router = P(router_name, data, subnets)
