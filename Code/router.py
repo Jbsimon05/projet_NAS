@@ -71,17 +71,17 @@ class Router:
         self.file += "router ospf 1\n"
 
         for interface in self.subnets[self.router_name].keys():
-            if interface != "loopback":
+            if interface == "loopback":
+                self.file += " network {} {} area 0\n".format(
+                    extract_ip_address(get_subnet(self.subnets[self.router_name]["loopback"])),
+                    get_wildcard_mask(get_subnet(self.subnets[self.router_name]["loopback"]))
+                )
+            else:
                 if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
-                    self.file += " network {} {} area 0\n".format(
-                        extract_ip_address(self.subnets[self.router_name]["loopback"]),
-                        get_wildcard_mask(self.subnets[self.router_name]["loopback"])
-                    )
-                else: 
-                    self.file += " network {} {} area 0\n".format(
-                        extract_ip_address(self.subnets[self.router_name][interface]["ip"]),
-                        get_wildcard_mask(self.subnets[self.router_name][interface]["ip"])
-                    )
+                        self.file += " network {} {} area 0\n".format(
+                            extract_ip_address(get_subnet(self.subnets[self.router_name][interface]["ip"])),
+                            get_wildcard_mask(get_subnet(self.subnets[self.router_name][interface]["ip"]))
+                        )
 
 
         self.file += f" maximum-paths {self.max_path}\n"
