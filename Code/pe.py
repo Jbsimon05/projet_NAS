@@ -45,6 +45,7 @@ class PE(Router):
                 )
         self.file += " !\n"
         self.file += " address-family ipv4\n"
+        self.file += "  redistribute connected\n"
         for neighbors in self.intent["Backbone"]["routers"]:
             if neighbors != self.router_name:
                 self.file += "  neighbor {} activate\n".format(

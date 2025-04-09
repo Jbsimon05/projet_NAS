@@ -62,6 +62,6 @@ class CE(Router):
         self.file += " address-family ipv4\n"
         self.file += "  redistribute connected\n"
         self.file += f"  neighbor {extract_ip_address(neighbor_ip)} activate\n"
-        self.file += f"  neighbor {extract_ip_address(neighbor_ip)} allowas-in 2\n"
+        self.file += f"  neighbor {extract_ip_address(neighbor_ip)} allowas-in 4\n"
         self.file += " exit-address-family\n"
 

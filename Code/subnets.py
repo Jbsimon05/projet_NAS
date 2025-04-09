@@ -116,7 +116,7 @@ class SubnetsGen:
         return self.subnet_interconnexion_dict[AS][(routeur1, routeur2)] or self.subnet_interconnexion_dict[AS][(routeur2, routeur1)]
 
     def generate_all_subnets(self) -> None:
-        self.all_subnets = list(islice(ipaddress.IPv4Network(self.intent["Backbone"]["address"]).subnets(new_prefix=30), 100))
+        self.all_subnets = list(islice(ipaddress.IPv4Network(self.intent["Backbone"]["address"]).subnets(new_prefix=29), 100))
 
     def generate_addresses_dict(self) -> None:
         """
