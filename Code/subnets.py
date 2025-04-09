@@ -68,15 +68,14 @@ class SubnetsGen:
         self.subnet_dict = {}
         # Iterate over each AS
         for AS in self.intent:
-            self.subnet_dict[AS] = {}
             subnet_number = 1
             # Iterate over each router of the current AS
             for router in self.intent[AS]['routers']:
                 # Iterate over each neighbor of the current router
                 for neighbor in self.intent[AS]['routers'][router]:
                     # To avoid duplicates, ensure the router with the smaller numeric suffix comes first
-                    if not (router, neighbor) in self.subnet_dict[AS].keys() and not (neighbor, router) in self.subnet_dict[AS].keys():
-                        self.subnet_dict[AS][(router, neighbor)] = subnet_number
+                    if not (router, neighbor) in self.subnet_dict.keys() and not (neighbor, router) in self.subnet_dict.keys():
+                        self.subnet_dict[(router, neighbor)] = subnet_number
                         subnet_number += 1
 
     def last_entries_subnet(self) -> None:
@@ -116,7 +115,7 @@ class SubnetsGen:
         return self.subnet_interconnexion_dict[AS][(routeur1, routeur2)] or self.subnet_interconnexion_dict[AS][(routeur2, routeur1)]
 
     def generate_all_subnets(self) -> None:
-        self.all_subnets = list(islice(ipaddress.IPv4Network(self.intent["Backbone"]["address"]).subnets(new_prefix=30), 100))
+        self.all_subnets = list(islice(ipaddress.IPv4Network(self.intent["Backbone"]["address"]).subnets(new_prefix=29), 100))
 
     def generate_addresses_dict(self) -> None:
         """
@@ -142,6 +141,7 @@ class SubnetsGen:
         # Creates the subnet_dict
         self.give_subnet_dict()
         self.generate_all_subnets()
+        print(self.subnet_dict)
         # Iterate over each AS
         for AS in self.intent:
             # Iterate over each router in the current AS
@@ -152,11 +152,11 @@ class SubnetsGen:
                 for neighbor, interface in {**self.intent[AS]['routers'][router], "loopback": "loopback"}.items():
                     if neighbor != "loopback":
                         # To ensure it's in the correct order
-                        if self.subnet_dict[AS].get((router, neighbor)):
-                            subnet_index = self.subnet_dict[AS][(router, neighbor)]
+                        if self.subnet_dict.get((router, neighbor)):
+                            subnet_index = self.subnet_dict[(router, neighbor)]
                             router_index = 1
-                        elif self.subnet_dict[AS].get((neighbor, router)):
-                            subnet_index = self.subnet_dict[AS][(neighbor, router)]
+                        elif self.subnet_dict.get((neighbor, router)):
+                            subnet_index = self.subnet_dict[(neighbor, router)]
                             router_index = 2
                         ipv4_address = add_ip(self.all_subnets[subnet_index - 1], router_index)
                         self.subnets[router][interface["link"]] = {
