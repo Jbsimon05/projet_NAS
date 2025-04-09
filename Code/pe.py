@@ -77,19 +77,26 @@ class PE(Router):
                 if neighbors[0] == "C":
                     for keys in list(self.subnets[neighbors].keys()):
                         if keys[0][0] in "GF":
+                            
+                            ip = 0
+                            for interface in self.subnets[neighbors]:
+                                if interface != "loopback":
+                                    if self.subnets[neighbors][interface]["neighbor"] == self.router_name:
+                                        ip = self.subnets[neighbors][interface]["ip"]
+                                        break
 
                             self.file += " address-family ipv4 vrf {}\n".format(
                                 self.subnets[neighbors][keys]["vrf_name"] # creer cette fonction
                             )
                             self.file += "  neighbor {} remote-as {}\n".format(
-                                extract_ip_address(self.subnets[neighbors]["loopback"]), #loopback
+                                extract_ip_address(ip), #loopback
                                 self.subnets[neighbors][keys]["AS_number"] # creer cette fonction
                             )
                             self.file += "  neighbor {} activate\n".format(
-                                extract_ip_address(self.subnets[neighbors]["loopback"]), #loopback
+                                extract_ip_address(ip), #loopback
                             )
                             self.file += "  neighbor {} send-community both\n".format(
-                                extract_ip_address(self.subnets[neighbors]["loopback"]), #loopback
+                                extract_ip_address(ip), #loopback
 
                             )
                             self.file += " exit-address-family\n"
