@@ -16,7 +16,7 @@ class PE(Router):
         self.generate_vrf()
         self.generate_init_config2(True)
         self.generate_interfaces()
-        self.generate_ospf_pe()
+        self.generate_ospf()
         self.generate_bgp()
         self.generate_finale_config()
         return self.file
@@ -24,26 +24,6 @@ class PE(Router):
     Classe représentant un routeur Provider Edge (PE).
     """
 
-    def generate_ospf_pe(self):
-        """
-        Génère la configuration du protocole de routage IGP (OSPF).
-
-        Cette méthode est à utiliser pour les sous-classes : P et PE
-        """
-        self.max_path = 3
-        self.file += "router ospf 1\n"
-
-        for interface in self.subnets[self.router_name].keys():
-            if interface != "loopback":
-                if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
-                    self.file += " network {} {} area 0\n".format(
-                        extract_ip_address(self.subnets[self.router_name]["loopback"]),
-                        get_wildcard_mask(self.subnets[self.router_name]["loopback"])
-                    )
-
-
-
-        self.file += f" maximum-paths {self.max_path}\n"
 
 
 
