@@ -191,7 +191,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-R1",
-            "ip": "192.168.1.1/29",
+            "ip": "192.168.1.129/29",
             "AS_number": "65001",
             "vrf_name": "Red",
             "linkType": "OSPF"
@@ -208,7 +208,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-R2",
-            "ip": "192.168.1.9/29",
+            "ip": "192.168.1.137/29",
             "AS_number": "65001",
             "vrf_name": "Red",
             "linkType": "OSPF"
@@ -225,7 +225,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-R3",
-            "ip": "192.168.1.17/29",
+            "ip": "192.168.1.145/29",
             "AS_number": "65001",
             "vrf_name": "Red",
             "linkType": "OSPF"
@@ -235,7 +235,7 @@
     "C-R1": {
         "FastEthernet0/0": {
             "neighbor": "CE-R1",
-            "ip": "192.168.1.2/29",
+            "ip": "192.168.1.130/29",
             "AS_number": "65001",
             "vrf_name": "Red",
             "linkType": "OSPF"
@@ -245,7 +245,7 @@
     "C-R2": {
         "FastEthernet0/0": {
             "neighbor": "CE-R2",
-            "ip": "192.168.1.10/29",
+            "ip": "192.168.1.138/29",
             "AS_number": "65001",
             "vrf_name": "Red",
             "linkType": "OSPF"
@@ -255,7 +255,7 @@
     "C-R3": {
         "FastEthernet0/0": {
             "neighbor": "CE-R3",
-            "ip": "192.168.1.18/29",
+            "ip": "192.168.1.146/29",
             "AS_number": "65001",
             "vrf_name": "Red",
             "linkType": "OSPF"
@@ -272,7 +272,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-G1",
-            "ip": "192.168.1.1/29",
+            "ip": "192.168.1.153/29",
             "AS_number": "65002",
             "vrf_name": "Green",
             "linkType": "OSPF"
@@ -289,7 +289,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-G2",
-            "ip": "192.168.1.9/29",
+            "ip": "192.168.1.161/29",
             "AS_number": "65002",
             "vrf_name": "Green",
             "linkType": "OSPF"
@@ -306,7 +306,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-G3",
-            "ip": "192.168.1.17/29",
+            "ip": "192.168.1.169/29",
             "AS_number": "65002",
             "vrf_name": "Green",
             "linkType": "OSPF"
@@ -316,7 +316,7 @@
     "C-G1": {
         "FastEthernet0/0": {
             "neighbor": "CE-G1",
-            "ip": "192.168.1.2/29",
+            "ip": "192.168.1.154/29",
             "AS_number": "65002",
             "vrf_name": "Green",
             "linkType": "OSPF"
@@ -326,7 +326,7 @@
     "C-G2": {
         "FastEthernet0/0": {
             "neighbor": "CE-G2",
-            "ip": "192.168.1.10/29",
+            "ip": "192.168.1.162/29",
             "AS_number": "65002",
             "vrf_name": "Green",
             "linkType": "OSPF"
@@ -336,7 +336,7 @@
     "C-G3": {
         "FastEthernet0/0": {
             "neighbor": "CE-G3",
-            "ip": "192.168.1.18/29",
+            "ip": "192.168.1.170/29",
             "AS_number": "65002",
             "vrf_name": "Green",
             "linkType": "OSPF"
@@ -353,7 +353,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-B1",
-            "ip": "192.168.1.1/29",
+            "ip": "192.168.1.177/29",
             "AS_number": "65003",
             "vrf_name": "Blue",
             "linkType": "OSPF"
@@ -370,7 +370,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-B2",
-            "ip": "192.168.1.9/29",
+            "ip": "192.168.1.185/29",
             "AS_number": "65003",
             "vrf_name": "Blue",
             "linkType": "OSPF"
@@ -387,7 +387,7 @@
         },
         "FastEthernet0/0": {
             "neighbor": "C-B3",
-            "ip": "192.168.1.17/29",
+            "ip": "192.168.1.193/29",
             "AS_number": "65003",
             "vrf_name": "Blue",
             "linkType": "OSPF"
@@ -397,7 +397,7 @@
     "C-B1": {
         "FastEthernet0/0": {
             "neighbor": "CE-B1",
-            "ip": "192.168.1.2/29",
+            "ip": "192.168.1.178/29",
             "AS_number": "65003",
             "vrf_name": "Blue",
             "linkType": "OSPF"
@@ -407,7 +407,7 @@
     "C-B2": {
         "FastEthernet0/0": {
             "neighbor": "CE-B2",
-            "ip": "192.168.1.10/29",
+            "ip": "192.168.1.186/29",
             "AS_number": "65003",
             "vrf_name": "Blue",
             "linkType": "OSPF"
@@ -417,7 +417,7 @@
     "C-B3": {
         "FastEthernet0/0": {
             "neighbor": "CE-B3",
-            "ip": "192.168.1.18/29",
+            "ip": "192.168.1.194/29",
             "AS_number": "65003",
             "vrf_name": "Blue",
             "linkType": "OSPF"

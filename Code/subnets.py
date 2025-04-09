@@ -67,8 +67,8 @@ class SubnetsGen:
         """
         self.subnet_dict = {}
         # Iterate over each AS
+        subnet_number = 1
         for AS in self.intent:
-            subnet_number = 1
             # Iterate over each router of the current AS
             for router in self.intent[AS]['routers']:
                 # Iterate over each neighbor of the current router
