@@ -57,7 +57,7 @@ class CE(Router):
         self.file += f"router bgp {as_number}\n"
         self.file += f" bgp router-id {extract_ip_address(self.subnets[self.router_name]['loopback'])}\n"
         self.file += " bgp log-neighbor-changes\n"
-        self.file += f" neighbor {extract_ip_address(neighbor_ip)} remote-as {as_number}\n"
+        self.file += f" neighbor {extract_ip_address(neighbor_ip)} remote-as {self.subnets[neighbor][link]['AS_number']}\n"
         self.file += " !\n"
         self.file += " address-family ipv4\n"
         self.file += "  redistribute connected\n"
