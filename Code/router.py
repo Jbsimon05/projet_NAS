@@ -74,13 +74,13 @@ class Router:
             if interface == "loopback":
                 self.file += " network {} {} area 0\n".format(
                     extract_ip_address(get_subnet(self.subnets[self.router_name]["loopback"])),
-                    get_wildcard_mask(get_subnet(self.subnets[self.router_name]["loopback"]))
+                    get_wildcard_mask(self.subnets[self.router_name]["loopback"])
                 )
             else:
                 if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
                         self.file += " network {} {} area 0\n".format(
                             extract_ip_address(get_subnet(self.subnets[self.router_name][interface]["ip"])),
-                            get_wildcard_mask(get_subnet(self.subnets[self.router_name][interface]["ip"]))
+                            get_wildcard_mask(self.subnets[self.router_name][interface]["ip"])
                         )
 
 
