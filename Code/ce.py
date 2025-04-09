@@ -33,8 +33,7 @@ class CE(Router):
             self.file += "!\n" + config
             if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
                 self.file += " mpls ip\n"
-        self.file += f"interface Loopback0\n"
-        self.file += f" ip address {self.subnets[self.router_name]['loopback']}\n!\n"
+
 
     def generate_bgp(self):
         """
@@ -56,9 +55,9 @@ class CE(Router):
         neighbor_ip = self.subnets[neighbor][link]["ip"]
 
         self.file += f"router bgp {as_number}\n"
-        self.file += f" bgp router-id {self.subnets[self.router_name]['loopback']}\n"
+        self.file += f" bgp router-id {extract_ip_address(self.subnets[self.router_name]['loopback'])}\n"
         self.file += " bgp log-neighbor-changes\n"
-        self.file += f" neighbor {neighbor_ip} remote-as {as_number}\n"
+        self.file += f" neighbor {extract_ip_address(neighbor_ip)} remote-as {as_number}\n"
         self.file += " !\n"
         self.file += " address-family ipv4\n"
         self.file += "  redistribute connected\n"

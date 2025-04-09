@@ -54,11 +54,12 @@ class Router:
         for interface, specs in self.subnets[self.router_name].items():
             if interface != "ospf_cost" :
                 if interface != "loopback":
-                    self.interfaces[interface] = f" interface {interface}\n"
+                    self.interfaces[interface] = f"interface {interface}\n"
                     self.interfaces[interface] += f" ip address {extract_ip_address(specs['ip'])} {get_subnet_mask(specs['ip'])}\n"
                     if interface == "FastEthernet0/0" : self.interfaces[interface] += " duplex full\n"
-                    self.interfaces[interface] += " negociate auto\n"
+                    else : self.interfaces[interface] += " negotiation auto\n"
                     #self.interfaces[interface] += f" ip ospf cost {specs['ospf_cost']}\n"
+
 
     def generate_ospf(self):
         """

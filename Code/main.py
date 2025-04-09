@@ -18,7 +18,7 @@ with open('subnets.json', 'r') as file:
     subnets = json.load(file)
 
 ### @TODO : changer ce path
-local_path = Path("C:/Users/theop/GNS3/projects/projet_NAS_final/project-files/dynamips")
+local_path = Path("/mnt/c/Users/pault/GNS3/projects/projet_NAS_final2/project-files/dynamips")
 
 directories = []
 for d in local_path.iterdir():
@@ -80,7 +80,7 @@ def edit_config_test(data: dict, subnets: dict):
 
 if __name__ == "__main__":
     start = time.time()
-    #edit_config(directories, data, subnets)
+    edit_config(directories, data, subnets)
     edit_config_test(data, subnets)
     end = time.time()
     print("Temps d'exécution total :", end - start)
