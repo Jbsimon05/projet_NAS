@@ -29,10 +29,8 @@ class CE(Router):
         """
         super().generate_interfaces()
         self.file += self.loopback
-        for interface, config in self.interfaces.items():
-            self.file += "!\n" + config
-            if self.subnets[self.router_name][interface]["linkType"] == "OSPF":
-                self.file += " mpls ip\n"
+        for config in self.interfaces.values():
+            self.file += "!\n" + config + "!\n"
 
 
     def generate_bgp(self):
