@@ -35,6 +35,20 @@ def find_index(filename, line: str) -> int:
 
 import ipaddress
 
+
+def get_subnet(cidr_notation: str) -> str:
+    """
+    Computes the network address from an IP address in CIDR notation.
+
+    Args:
+        cidr_notation (str): The IP address in CIDR notation (e.g., '192.168.1.1/24').
+
+    Returns:
+        str: The network address (e.g., '192.168.1.0').
+    """
+    network = ipaddress.ip_network(cidr_notation, strict=False)
+    return str(network.network_address)
+
 def extract_ip_address(cidr_notation: str) -> str:
     """
     Extracts the IP address from a CIDR notation string.
